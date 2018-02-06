@@ -4,10 +4,12 @@ public class MovimientoConecta4 extends Movimiento {
 	
 	private int fila;
 	private int columna;
+	//private int turno;
 	
-	public MovimientoConecta4(int fila, int columna) {
+	public MovimientoConecta4(int fila, int columna/*, int turno*/) {
 		this.fila = fila;
 		this.columna = columna;
+		//this.turno = turno;
 	}
 
 	@Override
@@ -20,7 +22,22 @@ public class MovimientoConecta4 extends Movimiento {
 	public boolean equals(Object o) {
 		// TODO Auto-generated method stub
 		MovimientoConecta4 m2 = (MovimientoConecta4) o;
-		return (m2.fila==fila)&(m2.columna==columna);
+		return (m2.fila==fila)&&(m2.columna==columna);
+	}
+	
+	/**
+	 * 
+	 * @return fila correspodiente al movimiento
+	 */
+	public int getFila() {
+		return fila;
+	}
+	/**
+	 * 
+	 * @return columna correspondiente al movimieto
+	 */
+	public int getColumna() {
+		return columna;
 	}
 
 }
