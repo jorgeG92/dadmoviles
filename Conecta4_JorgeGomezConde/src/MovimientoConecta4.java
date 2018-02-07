@@ -6,10 +6,9 @@ public class MovimientoConecta4 extends Movimiento {
 	private int columna;
 	//private int turno;
 	
-	public MovimientoConecta4(int fila, int columna/*, int turno*/) {
+	public MovimientoConecta4(int fila, int columna) {
 		this.fila = fila;
 		this.columna = columna;
-		//this.turno = turno;
 	}
 
 	@Override

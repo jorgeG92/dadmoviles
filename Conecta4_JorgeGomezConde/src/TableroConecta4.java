@@ -9,36 +9,47 @@ public class TableroConecta4 extends Tablero {
 	/** Array que contiene el tablero*/
 	private int[][] tablero;
 	/** Array que contiene los movimientos validos*/
-	private ArrayList<Movimiento> movimientosValidos;
+	//private ArrayList<Movimiento> movimientosValidos;
 	/** Entero que contiene el numero de columanas y de filas del juego*/
-	private int tamanio;
+	private int tamanioFilas;
+	/** Entero que contiene el numero de columanas y de filas del juego*/
+	private int tamanioColumnas;
 	
-	
+	/**
+	 * 
+	 */
 	public TableroConecta4() {
 		
 		// Inicializamos la tabla de movimientos validos
-		tamanio=4;
-		/*movimientosValidos = new ArrayList<Movimiento>();		
-		for (int i = 1; i<=tamanio; i++) {
-			movimientosValidos.add(new MovimientoConecta4(1,i));
-		}*/
+		tamanioFilas=6;
+		tamanioColumnas=7;
+		tablero = new int[tamanioFilas][tamanioColumnas];
+		estado = Tablero.EN_CURSO;
 		
 		/** Inicializamos el tablero con todas las posiciones a 1*/
-		for (int fila=0; fila<tamanio; fila++) {
-			for(int col=0; col<tamanio ;col++) {
+		for (int fila=0; fila<tamanioFilas; fila++) {
+			for(int col=0; col<tamanioColumnas ;col++) {
 				tablero[fila][col]=-1;
 			}
 		}
 	}
 	
+	/**
+	 * 
+	 * @param tam_tablero
+	 */
 	public TableroConecta4(int tam_tablero) {
 		
 		/* Inicializamos la tabla de movimientos validos en funcion del tamaño del tablero */ 
 		/* introducido por parametro */
-		tamanio = tam_tablero;
+		tamanioFilas=tam_tablero;
+		tamanioColumnas=tam_tablero;
+		tablero = new int[tamanioFilas][tamanioColumnas];
+		estado = Tablero.EN_CURSO;
+		
 		/** Inicializamos el tablero con todas las posiciones a 1*/
-		for (int fila=0; fila<tamanio; fila++) {
-			for(int col=0; col<tamanio ;col++) {
+		for (int fila=0; fila<tamanioFilas; fila++) {
+			for(int col=0; col<tamanioColumnas ;col++) {
 				tablero[fila][col]=-1;
 			}
 		}
@@ -46,10 +57,21 @@ public class TableroConecta4 extends Tablero {
 
 	@Override
 	protected void mueve(Movimiento m) throws ExcepcionJuego {
+		
 		// TODO Auto-generated method stub
 		/* No se comprueba si es valido, se da por echo que lo es*/
+		MovimientoConecta4 m4 = (MovimientoConecta4) m;
+		int filaM = m4.getFila();
+		int colM =  m4.getColumna();
 		
-
+		/** Actualizamos el tablero */
+		tablero[filaM][colM] = turno;		
+		
+		/**Actualizamos el utlimo movimiento*/
+		ultimoMovimiento = m;
+		
+		 /** Cambiamos el turno */
+		cambiaTurno();
 	}
 
 	@Override
@@ -64,19 +86,23 @@ public class TableroConecta4 extends Tablero {
 
 	@Override
 	public ArrayList<Movimiento> movimientosValidos() {
+		
 		// TODO Auto-generated method stub
 		ArrayList<Movimiento> mV = new ArrayList<Movimiento>();
+		
 		/** Recorremos el tablero para encontrar los movimientos validos */
-		for(int col=0; col<tamanio; col++) {
-			for(int fila=0; fila<tamanio; fila++) {
+		for(int col=0; col<tamanioColumnas; col++) {
+			for(int fila=0; fila<tamanioFilas; fila++) {
+				
 				/** Si encontramos una ficha en una columna, 		*
 				 *  devolvemos el movimiento de una fila mas arriba */
-				if (tablero[col][fila] !=-1) {
+				if (tablero[fila][col] !=-1 && fila>0) {					
 					mV.add(new MovimientoConecta4(fila+1, col));
 					break;
 				}
-				/** Si llegamos al ultimo de la fila */
-				if (fila==tamanio-1)
+				
+				/** Si llegamos al ultima fila de la columna */
+				if (fila==tamanioFilas-1)
 					mV.add(new MovimientoConecta4(fila, col));
 			}
 		}
@@ -86,7 +112,7 @@ public class TableroConecta4 extends Tablero {
 	@Override
 	public String tableroToString() {
 		// TODO Auto-generated method stub
-		return "Cadena que muestra el tablero";
+		return "Cadena que muestra el tablero con toda su informacion";
 	}
 
 	@Override
@@ -98,11 +124,12 @@ public class TableroConecta4 extends Tablero {
 
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
-		String mesa = "****Tablero Conecta 4****\n\n";
 		
-		for(int fila=0; fila<tamanio; fila++) {
-			for(int col=0; col<tamanio; col++) {
+		// TODO Auto-generated method stub
+		String mesa = "\n****Tablero Conecta 4****\n";
+		
+		for(int fila=0; fila<tamanioFilas; fila++) {
+			for(int col=0; col<tamanioColumnas; col++) {
 				if (tablero[fila][col]!=-1)
 					mesa += "["+tablero[fila][col]+"]";
 				else
@@ -115,10 +142,19 @@ public class TableroConecta4 extends Tablero {
 	
 	/**
 	 * 
-	 * @return Devuelve el tamaño del tablero
+	 * @return Devuelve el numero de filas del tablero
 	 */
-	public int getTamanio() {
-		return tamanio;
+	public int getTamanioFilas() {
+		return tamanioFilas;
 	}
+	
+	/**
+	 * 
+	 * @return Devuelve el numero de columnas del tablero
+	 */
+	public int getTamanioColumnas() {
+		return tamanioColumnas;
+	}
+	
 
 }
