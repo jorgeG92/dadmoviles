@@ -3,7 +3,9 @@ import java.util.*;
 
 public class JugadorHumano implements Jugador{
 	
+	/** Nombre del jugador	 */
 	private String nombre;
+	/** Turno del jugador*/
 	private int turno;
 	
 	public JugadorHumano() {}
@@ -75,8 +77,12 @@ public class JugadorHumano implements Jugador{
 	    				System.out.println("La columna no esta disponible\n");
     			}
     			/* Realizamos accion */
-    			evento.getPartida().realizaAccion(new AccionMover(
-            			this, t.movimientosValidos().get(seleccion)));    			
+    			try {
+    				evento.getPartida().realizaAccion(new AccionMover(
+            			this, tablero.movimientosValidos().get(seleccion)));
+    			}
+    			catch(Exception e) {    				
+    			}
     			break;
     	}  	
     	
