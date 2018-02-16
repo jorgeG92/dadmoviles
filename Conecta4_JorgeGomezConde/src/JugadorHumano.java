@@ -4,7 +4,8 @@ import java.util.*;
 /**
  * 
  * @author jorge
- *
+ * @class JugadorHumano
+ * @version 1.0
  */
 public class JugadorHumano implements Jugador{
 	

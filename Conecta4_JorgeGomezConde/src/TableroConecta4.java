@@ -67,7 +67,7 @@ public class TableroConecta4 extends Tablero {
 		/*Comprobamos el estado de la partida*/		
 		estado = checkEstadoTablero();
 		
-		switch(estado) {
+		/*switch(estado) {
 			case Tablero.FINALIZADA:			
 				System.out.println(toString());
 			break;
@@ -77,8 +77,8 @@ public class TableroConecta4 extends Tablero {
 			default:
 			/** Cambiamos el turno */
 			cambiaTurno();
-			break;		
-		}
+		/*	break;		
+		}*/
 		
 		
 		 
@@ -116,12 +116,43 @@ public class TableroConecta4 extends Tablero {
 	@Override
 	public String tableroToString() {
 		// TODO Auto-generated method stub
-		return "Cadena que muestra el tablero con toda su informacion";
+		String tableroString;
+		MovimientoConecta4 m4 = (MovimientoConecta4) this.ultimoMovimiento;
+		/* Añadimos los datos del estado de la partida*/
+		tableroString = this.tamanioFilas+":"+this.tamanioColumnas+":"+this.numJugadores+":"+this.turno+":"+this.numJugadas+":"+m4.getColumna()+"|";
+		
+		/* Añadimos la disposicion del tablero */		
+		for(int fila=0; fila<tamanioFilas; fila++) {			
+			for(int columna=0; columna<tamanioColumnas-1; columna++) {
+				tableroString += tablero[fila][columna]+"=";
+				if(fila!=tamanioColumnas-1) tableroString +=tablero[fila][columna];
+			}			
+			if(fila!=tamanioFilas-1) tableroString +="!";
+		}			
+		return tableroString;
 	}
 
 	@Override
 	public void stringToTablero(String cadena) throws ExcepcionJuego {
-		// TODO Auto-generated method stub
+		// TODO Auto-generated method stub		
+		String datos = cadena.split("|")[0];
+		String tablero = cadena.split("|")[1];
+		
+		//Extraer los datos de la partida
+		this.tamanioFilas = Integer.parseInt( datos.split(":")[0]);
+		this.tamanioColumnas = Integer.parseInt( datos.split(":")[1]);
+		this.numJugadores = Integer.parseInt( datos.split(":")[2]);
+		this.turno = Integer.parseInt( datos.split(":")[3]);
+		this.numJugadas = Integer.parseInt( datos.split(":")[4]);		
+		ultimoMovimiento = new MovimientoConecta4(Integer.parseInt( datos.split(":")[5]));		
+		
+		//Extraer el tamaño de la fila y de la columna
+		for(int fila=0; fila<tamanioFilas; fila++) {
+			String filaString = tablero.split("!")[fila];
+			for(int columna=0; columna<tamanioColumnas; columna++ ) 
+				this.tablero[fila][columna] = Integer.parseInt( filaString.split("=")[columna] );
+		}
+		
 		return;
 
 	}
@@ -130,8 +161,7 @@ public class TableroConecta4 extends Tablero {
 	public String toString() {
 		
 		// TODO Auto-generated method stub
-		String mesa = "\n****Tablero Conecta 4****\n";
-		
+		String mesa = "\n****Tablero Conecta 4****\n";		
 		/** Pintamos el tablero */
 		for(int fila=0; fila<tamanioFilas; fila++) {
 			for(int col=0; col<tamanioColumnas; col++) {
@@ -142,10 +172,10 @@ public class TableroConecta4 extends Tablero {
 			}
 			mesa += "\n";
 		}
-		/** Pintamos el numero de columnas */
+		/** Pintamos el numero de columnas */		
 		mesa += "---------------------\n"; 
 		for(int i = 0;  i<tamanioColumnas; i++) {
-			mesa += "["+i+"]"; 			
+			mesa += "{"+i+"}"; 			
 		}
 		
 		return mesa;

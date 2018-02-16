@@ -1,27 +1,16 @@
 import es.uam.eps.multij.Evento;
-import es.uam.eps.multij.Jugador;
-import es.uam.eps.multij.Tablero;
+import es.uam.eps.multij.PartidaListener;
 
 /**
  * 
  * @author jorge
+ * @class JugadorObservador
  *
  */
-public class JugadorObservador implements Jugador{
+public class JugadorObservador implements PartidaListener{
 	
 	public JugadorObservador() {
 		
-	}
-	
-	@Override
-	public String getNombre() {
-		return "Jugador Observador";
-		
-	}
-	    
-	@Override
-	public boolean puedeJugar(Tablero tablero) {	
-		return false;		
 	}
 	
 	@Override
