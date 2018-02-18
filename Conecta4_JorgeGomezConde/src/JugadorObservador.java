@@ -1,11 +1,10 @@
 import es.uam.eps.multij.Evento;
 import es.uam.eps.multij.PartidaListener;
 
-/**
+/** Clase JugadorObservador que implementa la interfaz Partida Listener
  * 
- * @author jorge
- * @class JugadorObservador
- *
+ * @author Jorge Gomez Conde
+ * @version 1.0 Febreo 18, 2018
  */
 public class JugadorObservador implements PartidaListener{
 	
@@ -34,6 +33,8 @@ public class JugadorObservador implements PartidaListener{
 		case Evento.EVENTO_FIN:
 			System.out.println("(Observador) Fin: ");
 			System.out.println(evento.getDescripcion()+"\n");
+			System.out.println("El utlimo movimiento fue: "+evento.getPartida().getTablero().getUltimoMovimiento().toString());
+			System.out.println("El utlimo movimiento fue: "+evento.getPartida().getTablero().getTurno());
 			break;
 		case Evento.EVENTO_TURNO:
 			System.out.println("(Observador) Turno: "+evento.getPartida().getTablero().getTurno());

@@ -1,14 +1,15 @@
-
 import java.util.ArrayList;
-
 import es.uam.eps.multij.ExcepcionJuego;
 import es.uam.eps.multij.Movimiento;
 import es.uam.eps.multij.Tablero;
 
-/**
+/** Clase TableroConecta4 que extiende la clase Tablero.
+ * Orientada a ser utilizada unicamente para el juego Conecta 4.
+ * Admite distintas dimesiones de tablero, siendo siempre la columna 
+ * una unidad mayor que las filas.
  * 
- * @author jorge
- *
+ * @author Jorge Gomez Conde
+ * @version 1.0 Febreo 18, 2018
  */
 public class TableroConecta4 extends Tablero {
 	
@@ -19,7 +20,7 @@ public class TableroConecta4 extends Tablero {
 	/** Entero que contiene el numero de columanas y de filas del juego*/
 	private int tamanioColumnas;
 	
-	/**
+	/** Construtor de la clase por defecto
 	 * 
 	 */
 	public TableroConecta4() {
@@ -32,9 +33,11 @@ public class TableroConecta4 extends Tablero {
 		iniTablero();
 	}
 	
-	/**
+	/**Constructor que permite definir la dimension 
+	 * del tablero
+	 * NOTA: las columnas son 1 unidad mas por defecto.
 	 * 
-	 * @param tam_tablero
+	 * @param tam_tablero tamanio de las filas
 	 */
 	public TableroConecta4(int tam_tablero) {
 		
@@ -62,23 +65,17 @@ public class TableroConecta4 extends Tablero {
 		tablero[fila][col] = (int)turno;		
 		
 		/**Actualizamos el utlimo movimiento*/
-		ultimoMovimiento = m;
+		ultimoMovimiento = m4;
 		
 		/*Comprobamos el estado de la partida*/		
 		estado = checkEstadoTablero();
 		
-		/*switch(estado) {
-			case Tablero.FINALIZADA:			
-				System.out.println(toString());
-			break;
-			case Tablero.TABLAS:
-				System.out.println(toString());
-			break;			
-			default:
-			/** Cambiamos el turno */
+		if (estado != EN_CURSO)
+			System.out.println(this.toString());
+		else
 			cambiaTurno();
-		/*	break;		
-		}*/
+			
+		
 		
 		
 		 
@@ -112,20 +109,28 @@ public class TableroConecta4 extends Tablero {
 		}
 		return mV;
 	}
-
+	
 	@Override
 	public String tableroToString() {
 		// TODO Auto-generated method stub
-		String tableroString;
+		String tableroString = new String();
 		MovimientoConecta4 m4 = (MovimientoConecta4) this.ultimoMovimiento;
 		/* Añadimos los datos del estado de la partida*/
-		tableroString = this.tamanioFilas+":"+this.tamanioColumnas+":"+this.numJugadores+":"+this.turno+":"+this.numJugadas+":"+m4.getColumna()+"|";
+		tableroString += this.tamanioFilas+":";
+		tableroString += this.tamanioColumnas+":";
+		tableroString += this.numJugadores+":";
+		tableroString += this.turno+":";
+		tableroString += this.numJugadas+":";
+		if (m4==null)
+			tableroString += "-1%";
+		else
+			tableroString += m4.getColumna()+"%";
 		
 		/* Añadimos la disposicion del tablero */		
 		for(int fila=0; fila<tamanioFilas; fila++) {			
-			for(int columna=0; columna<tamanioColumnas-1; columna++) {
-				tableroString += tablero[fila][columna]+"=";
-				if(fila!=tamanioColumnas-1) tableroString +=tablero[fila][columna];
+			for(int columna=0; columna<tamanioColumnas; columna++) {				
+				if(columna!=tamanioColumnas-1) tableroString +=tablero[fila][columna]+"=";
+				else tableroString += tablero[fila][columna];
 			}			
 			if(fila!=tamanioFilas-1) tableroString +="!";
 		}			
@@ -135,8 +140,11 @@ public class TableroConecta4 extends Tablero {
 	@Override
 	public void stringToTablero(String cadena) throws ExcepcionJuego {
 		// TODO Auto-generated method stub		
-		String datos = cadena.split("|")[0];
-		String tablero = cadena.split("|")[1];
+		String datos = cadena.split("%")[0];
+		String tablero = cadena.split("%")[1];
+		System.out.println(cadena+"\n");				
+		System.out.println(cadena.split("%")[1]+"\n");
+		
 		
 		//Extraer los datos de la partida
 		this.tamanioFilas = Integer.parseInt( datos.split(":")[0]);
@@ -144,7 +152,10 @@ public class TableroConecta4 extends Tablero {
 		this.numJugadores = Integer.parseInt( datos.split(":")[2]);
 		this.turno = Integer.parseInt( datos.split(":")[3]);
 		this.numJugadas = Integer.parseInt( datos.split(":")[4]);		
-		ultimoMovimiento = new MovimientoConecta4(Integer.parseInt( datos.split(":")[5]));		
+		if (Integer.parseInt( datos.split(":")[5])<0)
+			ultimoMovimiento = null;
+		else
+			ultimoMovimiento = new MovimientoConecta4(Integer.parseInt( datos.split(":")[5]));		
 		
 		//Extraer el tamaño de la fila y de la columna
 		for(int fila=0; fila<tamanioFilas; fila++) {
@@ -153,17 +164,21 @@ public class TableroConecta4 extends Tablero {
 				this.tablero[fila][columna] = Integer.parseInt( filaString.split("=")[columna] );
 		}
 		
+		estado = this.checkEstadoTablero();
 		return;
 
 	}
-
+	
+	/** Imprime el tablero de tal forma que sea legible 
+	 * para una persona */
 	@Override
 	public String toString() {
 		
 		// TODO Auto-generated method stub
 		String mesa = "\n****Tablero Conecta 4****\n";		
-		/** Pintamos el tablero */
+		/** Pintamos el tablero */		
 		for(int fila=0; fila<tamanioFilas; fila++) {
+			mesa+="{"+fila+"}";
 			for(int col=0; col<tamanioColumnas; col++) {
 				if (tablero[fila][col]!=-1)
 					mesa += "["+tablero[fila][col]+"]";
@@ -173,11 +188,12 @@ public class TableroConecta4 extends Tablero {
 			mesa += "\n";
 		}
 		/** Pintamos el numero de columnas */		
-		mesa += "---------------------\n"; 
+		mesa += "---------------------\n   "; 
 		for(int i = 0;  i<tamanioColumnas; i++) {
 			mesa += "{"+i+"}"; 			
 		}
 		
+		System.out.println(this.tableroToString());
 		return mesa;
 	}
 	
@@ -229,30 +245,26 @@ public class TableroConecta4 extends Tablero {
 		
 		/* Comprobamos debajo de la ficha */	
 		for (int f=fila; f < fila+4; f++) {			
-			if(f>tamanioFilas-1) break;			
-			if(tablero[f][columna]==turno)	contadorFichas +=1;			
+			if(f>tamanioFilas-1 || (tablero[f][columna]!=turno)) break;			
+			else contadorFichas +=1;			
 		}
 		
 		if (contadorFichas>=4) return Tablero.FINALIZADA; //Condicion de victoria
-		contadorFichas=0;		
+		contadorFichas=0;
 		
 		/* Comprobamos laterales de la ficha */
 		for(int c = columna; c > columna-4; c--) { 	//Lado izquierdo
-			if(c<0)	
+			if(c<0 || (tablero[fila][c]!=turno)) 				
 				break;
-			else if (tablero[fila][c]!=turno)
-				break;
-			else
-				contadorFichas += 1;
+			else 
+				contadorFichas += 1;			
 		}		
-
 		for(int c = columna+1; c < columna+4; c++) { 	//Lado derecho
-			if(c>tamanioColumnas-1 )	
-				break; 
-			else if (tablero[fila][c]!=turno)
-				break;
-			else
+			if(c>tamanioColumnas-1 || (tablero[fila][c]!=turno)) 				
+				break;			 
+			else 		
 				contadorFichas += 1;
+			
 		}
 		
 		if (contadorFichas>=4) return Tablero.FINALIZADA; //Condicion de victoria
@@ -263,28 +275,26 @@ public class TableroConecta4 extends Tablero {
 		int diagonal_f = 0;
 		int diagonal_c = 0;
 		//Hacia arriba
-		while(true) {			
-			if((fila+diagonal_f<0) || (columna+diagonal_c > tamanioColumnas-1))
-				break;			
-			if (tablero[fila+diagonal_f][columna+diagonal_c]==turno) {
+		while(true) {
+			if((fila+diagonal_f<0) || (columna+diagonal_c > tamanioColumnas-1) || tablero[fila+diagonal_f][columna+diagonal_c]!=turno)				
+				break;
+			else{				
 				contadorFichas += 1;
 				diagonal_f -=1;
 				diagonal_c +=1;
-			}else
-				break;			
+			}
 		}
 		//Hacia abajo
 		diagonal_f = +1;
 		diagonal_c = -1;
-		while(true) {	
-			if((fila+diagonal_f>tamanioFilas-1) || (columna+diagonal_c<0))
-				break;			
-			if (tablero[fila+diagonal_f][columna+diagonal_c]==turno) {
+		while(true) {			
+			if((fila+diagonal_f>tamanioFilas-1) || (columna+diagonal_c<0) || (tablero[fila+diagonal_f][columna+diagonal_c]!=turno)) 				
+				break;
+			else{				
 				contadorFichas += 1;
 				diagonal_f +=1;
 				diagonal_c -=1;
-			}else
-				break;
+			}
 		}
 		
 		if (contadorFichas>=4) return Tablero.FINALIZADA; //Condicion de victoria
@@ -294,30 +304,28 @@ public class TableroConecta4 extends Tablero {
 		diagonal_f = 0;
 		diagonal_c = 0;
 		//Hacia arriba
-		while(true) {			
-			if((fila+diagonal_f<0) || (columna+diagonal_c <0))
-				break;			
-			if (tablero[fila+diagonal_f][columna+diagonal_c]==turno) {
+		while(true) {
+			if((fila+diagonal_f<0) || (columna+diagonal_c <0) || (tablero[fila+diagonal_f][columna+diagonal_c]!=turno))				
+				break;
+			else {				
 				contadorFichas += 1;
 				diagonal_f -=1;
 				diagonal_c -=1;
-			}else
-				break;			
+			}			
 		}
 		//Hacia abajo
 		diagonal_f = +1;
 		diagonal_c = +1;
-		while(true) {			
-			if((fila+diagonal_f>tamanioFilas-1) || (columna+diagonal_c>tamanioColumnas-1))
-				break;			
-			if (tablero[fila+diagonal_f][columna+diagonal_c]==turno) {
+		while(true) {
+			if((fila+diagonal_f>tamanioFilas-1) || (columna+diagonal_c>tamanioColumnas-1) || (tablero[fila+diagonal_f][columna+diagonal_c]!=turno))
+				break;
+			else {				
 				contadorFichas += 1;
 				diagonal_f +=1;
 				diagonal_c +=1;
-			}else
-				break;
+			}
 		}
-		
+		System.out.println("Fichas en diagonal descendente: "+contadorFichas);
 		//Evaluacion final de la partida
 		if (contadorFichas>=4) return Tablero.FINALIZADA;		
 		if(movimientosValidos().isEmpty()) return Tablero.TABLAS;		
