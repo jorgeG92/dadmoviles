@@ -77,13 +77,26 @@ public class JugadorHumano implements Jugador{
     			// Pedimos en bucle que se introduzca una columna valida
     			while (seleccion<0 || mov==null || !tablero.esValido(mov)) {
 	    			System.out.println("Jugador "+nombre+", elije una columna:\n");
-	    			boton = new Scanner(System.in);
-	    			int col = boton.nextInt();
-	    			seleccion = generarMovimiento((TableroConecta4) evento.getPartida().getTablero(), col);
-	    			if (seleccion <0)
-	    				System.out.println("La columna no esta disponible "+nombre+"\n");
-	    			else
-	    				mov = (MovimientoConecta4) tablero.movimientosValidos().get(seleccion);   		
+	    			String col = new String();
+		    			try {
+		    			boton = new Scanner(System.in);
+		    			col = boton.next().trim();
+		    			seleccion = generarMovimiento((TableroConecta4) evento.getPartida().getTablero(), Integer.parseInt(col));
+		    			if (seleccion <0)
+		    				System.out.println("La columna no esta disponible "+nombre+"\n");
+		    			else
+		    				mov = (MovimientoConecta4) tablero.movimientosValidos().get(seleccion);
+	    			}catch(NumberFormatException nfe) {
+	    				if (col.length()>1)
+	    					this.onCambioEnPartida(new Evento(Evento.EVENTO_TURNO, "No se permiten cadenas tan largas",null,null));
+	    				else
+	    					this.onCambioEnPartida(new Evento(Evento.EVENTO_TURNO, "Formato no permitido",null,null));
+	    			}
+	    			catch(InputMismatchException ime) {
+	    				this.onCambioEnPartida(new Evento(Evento.EVENTO_TURNO, "Formato no permitido",null,null));
+	    			}
+	    		
+	    			
     			}
     			
     			try {

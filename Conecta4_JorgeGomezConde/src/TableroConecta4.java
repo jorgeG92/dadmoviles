@@ -8,8 +8,33 @@ import es.uam.eps.multij.Tablero;
  * Admite distintas dimesiones de tablero, siendo siempre la columna 
  * una unidad mayor que las filas.
  * 
+ * Describipcion del formato en el que se guardan y cargan las partidas 
+ * para los metodos stringToTablero() y tableroToString():
+ * 
+ * Separador: '%'
+ * 	-Primera parte: datos de la partida
+ *  -Segunda parte: disposicion del tablero
+ * 
+ * Separador: ':'
+ * 	Corresponde a la parte de datos, define de izquierda a derecha:
+ * 		-Numero de filas
+ * 		-Numero de columnas
+ * 		-Numero de jugadores
+ * 		-Turno
+ * 		-Ultimo movimiento
+ * 
+ * Separador: '!'
+ * 	Corresponde a la parte de defincion del tablero.
+ * 	Leyendo de izquierda a derecha, la primera corresponde con
+ *  la fila que se encuntra mas arriba del tablero
+ *
+ * Separador: '='
+ * 	Corresponde a la parte de defincion del tablero.
+ *  Dentro de cada fila, el orden indica la columna de mas a 
+ *  la izquierda a mas a la derecha. 
+ * 
  * @author Jorge Gomez Conde
- * @version 1.0 Febreo 18, 2018
+ * @version 1.0 Febrero 18, 2018
  */
 public class TableroConecta4 extends Tablero {
 	
@@ -141,10 +166,7 @@ public class TableroConecta4 extends Tablero {
 	public void stringToTablero(String cadena) throws ExcepcionJuego {
 		// TODO Auto-generated method stub		
 		String datos = cadena.split("%")[0];
-		String tablero = cadena.split("%")[1];
-		System.out.println(cadena+"\n");				
-		System.out.println(cadena.split("%")[1]+"\n");
-		
+		String tablero = cadena.split("%")[1];	
 		
 		//Extraer los datos de la partida
 		this.tamanioFilas = Integer.parseInt( datos.split(":")[0]);
@@ -170,10 +192,9 @@ public class TableroConecta4 extends Tablero {
 	}
 	
 	/** Imprime el tablero de tal forma que sea legible 
-	 * para una persona */
+	 * para un humano. */
 	@Override
-	public String toString() {
-		
+	public String toString() {		
 		// TODO Auto-generated method stub
 		String mesa = "\n****Tablero Conecta 4****\n";		
 		/** Pintamos el tablero */		
@@ -192,12 +213,10 @@ public class TableroConecta4 extends Tablero {
 		for(int i = 0;  i<tamanioColumnas; i++) {
 			mesa += "{"+i+"}"; 			
 		}
-		
-		System.out.println(this.tableroToString());
 		return mesa;
 	}
 	
-	/**
+	/** Metodo get para el tamanio de las filas
 	 * 
 	 * @return Devuelve el numero de filas del tablero
 	 */
@@ -325,7 +344,7 @@ public class TableroConecta4 extends Tablero {
 				diagonal_c +=1;
 			}
 		}
-		System.out.println("Fichas en diagonal descendente: "+contadorFichas);
+		
 		//Evaluacion final de la partida
 		if (contadorFichas>=4) return Tablero.FINALIZADA;		
 		if(movimientosValidos().isEmpty()) return Tablero.TABLAS;		
