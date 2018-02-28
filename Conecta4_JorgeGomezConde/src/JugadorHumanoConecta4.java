@@ -6,7 +6,7 @@ import java.util.*;
  * @author Jorge Gomez Conde
  * @version 1.0 Febreo 18, 2018
  */
-public class JugadorHumano implements Jugador{
+public class JugadorHumanoConecta4 implements Jugador{
 	
 	/** Nombre del jugador	*/
 	private String nombre;
@@ -14,14 +14,14 @@ public class JugadorHumano implements Jugador{
 	/**
 	 * Constructor de JugadorHumano por defecto
 	 */	
-	public JugadorHumano() { nombre = "default"; }
+	public JugadorHumanoConecta4() { nombre = "default"; }
 	
 	/**
 	 * Constructor de JugadorHumano que asigna el nombre elegido por
 	 * parametro
 	 * @param nombre
 	 */
-	public JugadorHumano(String nombre) {	this.nombre = nombre;	}
+	public JugadorHumanoConecta4(String nombre) {	this.nombre = nombre;	}
 	
 	/** Metodo get para nombre	 */
     @Override
@@ -78,7 +78,7 @@ public class JugadorHumano implements Jugador{
     			while (seleccion<0 || mov==null || !tablero.esValido(mov)) {
 	    			System.out.println("Jugador "+nombre+", elije una columna:\n");
 	    			String col = new String();
-		    			try {
+		    		try {
 		    			boton = new Scanner(System.in);
 		    			col = boton.next().trim();
 		    			seleccion = generarMovimiento((TableroConecta4) evento.getPartida().getTablero(), Integer.parseInt(col));

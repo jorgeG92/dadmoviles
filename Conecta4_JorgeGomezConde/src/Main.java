@@ -11,7 +11,7 @@ public class Main {
 		
 		/*Inicializacion de los jugadores*/
 		JugadorAleatorio jA = new JugadorAleatorio("Maquina 1");
-		JugadorHumano jH = new JugadorHumano("El Humano");
+		JugadorHumanoConecta4 jH = new JugadorHumanoConecta4("El Humano");
 		//JugadorAleatorio jH = new JugadorAleatorio("Maquina 2");
 		ArrayList<Jugador> jugadores = new ArrayList<Jugador>();
 		jugadores.add(jA);
@@ -29,7 +29,7 @@ public class Main {
 		*/	
 
 		Partida partida = new Partida(tablero, jugadores);
-		partida.addObservador(new JugadorObservador());		
+		partida.addObservador(new JugadorObservadorConecta4());		
 		//TableroConecta4 tablero = (TableroConecta4) partida.getTablero();
 		
 		/*Comienza la partida*/

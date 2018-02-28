@@ -98,12 +98,7 @@ public class TableroConecta4 extends Tablero {
 		if (estado != EN_CURSO)
 			System.out.println(this.toString());
 		else
-			cambiaTurno();
-			
-		
-		
-		
-		 
+			cambiaTurno(); 
 	}
 
 	@Override
@@ -262,37 +257,83 @@ public class TableroConecta4 extends Tablero {
 		if(fila == -1)
 			fila +=1;
 		
+		/* Comprobamos la columna de la ficha */
+		if (checkColumns(fila,columna)>=4) return Tablero.FINALIZADA;
+		/* Comprobamos laterales de la ficha */
+		if (checkFila(fila,columna)>=4) return Tablero.FINALIZADA;
+		if (checkDiagonalDescendente(fila,columna)>=4) return Tablero.FINALIZADA;
+		/* Comprobamos si el resultado es un empate */
+		if(movimientosValidos().isEmpty()) return Tablero.TABLAS;		
+		return Tablero.EN_CURSO;
+		
+	}
+	
+	/**
+	 * Inicializa el tablero con todas sus casillas con un -1
+	 */
+	private void iniTablero() {
+		for (int fila=0; fila<tamanioFilas; fila++) {
+			for(int col=0; col<tamanioColumnas ;col++) {
+				tablero[fila][col]=-1;
+			}
+		}
+		
+	}
+	
+	/** Cuenta las fichas que hay en una columna de un mismo
+	 * jugador dado un movimiento 
+	 * 
+	 * @param fila entero que indica la fila del movimiento
+	 * @param columna entero que indica la columna del movimiento
+	 * @return numero de fichas contadas
+	 */
+	private int checkColumns(int fila, int columna) {
+		int contadorFichas=0;
 		/* Comprobamos debajo de la ficha */	
 		for (int f=fila; f < fila+4; f++) {			
 			if(f>tamanioFilas-1 || (tablero[f][columna]!=turno)) break;			
 			else contadorFichas +=1;			
 		}
-		
-		if (contadorFichas>=4) return Tablero.FINALIZADA; //Condicion de victoria
-		contadorFichas=0;
-		
-		/* Comprobamos laterales de la ficha */
+		return contadorFichas;
+	}
+	
+	/** Cuenta las fichas que hay en una fila de un mismo
+	 * jugador daddo un movmiento
+	 * 
+	 * @param fila entero que indica la fila del movimiento
+	 * @param columna entero que indica la columna del movimiento
+	 * @return numero de fichas contadas
+	 */
+	private int checkFila(int fila, int columna) {
+		int contadorFichas = 0;
 		for(int c = columna; c > columna-4; c--) { 	//Lado izquierdo
 			if(c<0 || (tablero[fila][c]!=turno)) 				
 				break;
 			else 
 				contadorFichas += 1;			
-		}		
+		}
 		for(int c = columna+1; c < columna+4; c++) { 	//Lado derecho
 			if(c>tamanioColumnas-1 || (tablero[fila][c]!=turno)) 				
 				break;			 
 			else 		
 				contadorFichas += 1;
-			
 		}
-		
-		if (contadorFichas>=4) return Tablero.FINALIZADA; //Condicion de victoria
-		contadorFichas=0;		
-		
+		return contadorFichas;
+	}
+	
+	/** Cuenta las fichas que hay en una diagonal ascendente
+	 * de un mismo jugador dado un movmiento
+	 * 
+	 * @param fila entero que indica la fila del movimiento
+	 * @param columna entero que indica la columna del movimiento
+	 * @return numero de fichas contadas
+	 */
+	private int checkDiagonalAscendente(int fila, int columna) {
 		/*Comprobamos diagonales de la ficha*/
 		//Diagonal abajo-derecha a arriba-izquierda [/]
 		int diagonal_f = 0;
 		int diagonal_c = 0;
+		int contadorFichas = 0;
 		//Hacia arriba
 		while(true) {
 			if((fila+diagonal_f<0) || (columna+diagonal_c > tamanioColumnas-1) || tablero[fila+diagonal_f][columna+diagonal_c]!=turno)				
@@ -315,13 +356,21 @@ public class TableroConecta4 extends Tablero {
 				diagonal_c -=1;
 			}
 		}
+		return contadorFichas;
 		
-		if (contadorFichas>=4) return Tablero.FINALIZADA; //Condicion de victoria
-		contadorFichas=0;
-		
-		//Diagonal arriba-derecha a abajo-izquierda [\]
-		diagonal_f = 0;
-		diagonal_c = 0;
+	}
+	
+	/** Cuenta las fichas que hay en una diagonal descendente
+	 * de un mismo jugador dado un movmiento
+	 * -
+	 * @param fila entero que indica la fila del movimiento
+	 * @param columna entero que indica la columna del movimiento
+	 * @return numero de fichas contadas
+	 */
+	private int checkDiagonalDescendente(int fila, int columna) {
+		int diagonal_f = 0;
+		int diagonal_c = 0;
+		int contadorFichas=0;
 		//Hacia arriba
 		while(true) {
 			if((fila+diagonal_f<0) || (columna+diagonal_c <0) || (tablero[fila+diagonal_f][columna+diagonal_c]!=turno))				
@@ -344,24 +393,7 @@ public class TableroConecta4 extends Tablero {
 				diagonal_c +=1;
 			}
 		}
-		
-		//Evaluacion final de la partida
-		if (contadorFichas>=4) return Tablero.FINALIZADA;		
-		if(movimientosValidos().isEmpty()) return Tablero.TABLAS;		
-		return Tablero.EN_CURSO;
-		
-	}
-	
-	/**
-	 * Inicializa el tablero con todas sus casillas con un -1
-	 */
-	private void iniTablero() {
-		for (int fila=0; fila<tamanioFilas; fila++) {
-			for(int col=0; col<tamanioColumnas ;col++) {
-				tablero[fila][col]=-1;
-			}
-		}
-		
+		return contadorFichas;
 	}
 
 }

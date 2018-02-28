@@ -6,9 +6,9 @@ import es.uam.eps.multij.PartidaListener;
  * @author Jorge Gomez Conde
  * @version 1.0 Febreo 18, 2018
  */
-public class JugadorObservador implements PartidaListener{
+public class JugadorObservadorConecta4 implements PartidaListener{
 	
-	public JugadorObservador() {
+	public JugadorObservadorConecta4() {
 		
 	}
 	

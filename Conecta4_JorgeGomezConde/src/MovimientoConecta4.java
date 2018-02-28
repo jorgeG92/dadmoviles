@@ -21,9 +21,11 @@ public class MovimientoConecta4 extends Movimiento {
 
 	@Override
 	public boolean equals(Object o) {
-		MovimientoConecta4 m2 = (MovimientoConecta4) o;
-		return m2.columna==columna;
-	}
+	    if (!(o instanceof MovimientoConecta4))
+		   return false;
+	    else
+		   return this.toString().equals(o.toString());
+	 }
 	
 	/** Metodo get para la columna
 	 * @return columna correspondiente al movimieto
