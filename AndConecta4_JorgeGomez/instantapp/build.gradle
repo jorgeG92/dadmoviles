@@ -1,6 +1,0 @@
-apply plugin: 'com.android.instantapp'
-
-dependencies {
-    implementation project(':conecta4')
-    implementation project(':base')
-}
