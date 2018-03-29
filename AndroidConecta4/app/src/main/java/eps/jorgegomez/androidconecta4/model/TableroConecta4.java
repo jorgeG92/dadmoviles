@@ -179,8 +179,7 @@ public class TableroConecta4 extends Tablero {
 	/** Imprime el tablero de tal forma que sea legible 
 	 * para un humano. */
 	@Override
-	public String toString() {		
-		// TODO Auto-generated method stub
+	public String toString() {
 		String mesa = "\n****Tablero Conecta 4****\n";		
 		/** Pintamos el tablero */		
 		for(int fila=0; fila<tamanioFilas; fila++) {

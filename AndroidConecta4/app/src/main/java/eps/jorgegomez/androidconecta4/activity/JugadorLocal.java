@@ -1,5 +1,6 @@
 package eps.jorgegomez.androidconecta4.activity;
 
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.Snackbar;
 
@@ -69,7 +70,6 @@ public class JugadorLocal implements View.OnClickListener, Jugador{
 
     @Override
     public void onClick(View v) {
-        System.out.print("HASTA AQUI FUNCIONA - ONCLICKJUGADOR");
         try {
             if (game.getTablero().getEstado() != Tablero.EN_CURSO) {
                 Snackbar.make(v, R.string.round_already_finished,Snackbar.LENGTH_SHORT).show();
