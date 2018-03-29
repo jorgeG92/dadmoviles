@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Android4_JorgeGomez</string>
+    <string name="round_already_finished">La partida ya esta acabada</string>
+    <string name="game_over">Fin del juego</string>
+    <string name="invalid_movement">Movimiento no valido</string>
+    <string name="title">Conecta 4</string>
+</resources>
