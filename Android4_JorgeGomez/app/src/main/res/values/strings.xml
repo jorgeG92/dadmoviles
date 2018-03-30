@@ -4,4 +4,5 @@
     <string name="game_over">Fin del juego</string>
     <string name="invalid_movement">Movimiento no valido</string>
     <string name="title">Conecta 4</string>
+    <string name="round_title">Conecta 4R</string>
 </resources>

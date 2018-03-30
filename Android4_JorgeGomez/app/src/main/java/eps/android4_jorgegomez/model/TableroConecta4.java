@@ -186,10 +186,9 @@ public class TableroConecta4 extends Tablero {
      * para un humano. */
     @Override
     public String toString() {
-        String mesa = "\n****Tablero Conecta 4****\n";
+        String mesa = new String();
         /** Pintamos el tablero */
         for(int fila=0; fila<tamanioFilas; fila++) {
-            mesa+="{"+fila+"}";
             for(int col=0; col<tamanioColumnas; col++) {
                 if (tablero[fila][col]!=-1)
                     mesa += "["+tablero[fila][col]+"]";
@@ -197,11 +196,6 @@ public class TableroConecta4 extends Tablero {
                     mesa += "[ ]";
             }
             mesa += "\n";
-        }
-        /** Pintamos el numero de columnas */
-        mesa += "---------------------\n   ";
-        for(int i = 0;  i<tamanioColumnas; i++) {
-            mesa += "{"+i+"}";
         }
         return mesa;
     }
