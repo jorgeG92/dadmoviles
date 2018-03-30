@@ -1,5 +1,6 @@
 package eps.android4_jorgegomez.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -7,6 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 
 import java.util.List;
 
@@ -15,11 +18,11 @@ import eps.android4_jorgegomez.model.Round;
 import eps.android4_jorgegomez.model.RoundRepository;
 
 
-public class RoundListActivity extends AppCompatActivity {
+public class RoundListActivity extends AppCompatActivity implements RoundListFragment.Callbacks, RoundFragment.Callbacks{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_fragment);
+        setContentView(R.layout.activity_master_detail);
 
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.fragment_container);
@@ -30,5 +33,33 @@ public class RoundListActivity extends AppCompatActivity {
                     .add(R.id.fragment_container, fragment)
                     .commit();
         }
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
+    }
+
+    @Override
+    public void onRoundSelected(Round round){
+        if (findViewById(R.id.detail_fragment_container) == null) {
+            Intent intent = RoundActivity.newIntent(this, round.getId());
+            startActivity(intent);
+        } else {
+            RoundFragment roundFragment = RoundFragment.newInstance(round.getId());
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.detail_fragment_container, roundFragment)
+                    .commit();
+        }
+    }
+
+    @Override
+    public void onRoundUpdated(Round round) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        RoundListFragment roundListFragment = (RoundListFragment)
+                fragmentManager.findFragmentById(R.id.fragment_container);
+        roundListFragment.updateUI();
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
     }
 }

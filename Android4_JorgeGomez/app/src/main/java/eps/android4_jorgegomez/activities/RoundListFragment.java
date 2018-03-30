@@ -8,6 +8,9 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -23,6 +26,7 @@ public class RoundListFragment extends Fragment {
 
     private RecyclerView roundRecyclerView;
     private RoundAdapter roundAdapter;
+    private Callbacks callbacks;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -44,7 +48,36 @@ public class RoundListFragment extends Fragment {
         updateUI();
     }
 
-    private void updateUI() {
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        callbacks = (Callbacks) context;
+    }
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        callbacks = null;
+    }
+
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu, menu);
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_item_new_round:
+                Round round = new Round(RoundRepository.SIZE);
+                RoundRepository.get(getActivity()).addRound(round);
+                updateUI();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+
+    public void updateUI() {
         RoundRepository repository = RoundRepository.get(getActivity());
         List<Round> rounds = repository.getRounds();
         if (roundAdapter == null) {
@@ -54,6 +87,11 @@ public class RoundListFragment extends Fragment {
             roundAdapter.notifyDataSetChanged();
         }
     }
+
+    public interface Callbacks {
+            void onRoundSelected(Round round);
+    }
+
 
     public class RoundAdapter extends RecyclerView.Adapter<RoundAdapter.RoundHolder>{
 
@@ -83,11 +121,8 @@ public class RoundListFragment extends Fragment {
 
             @Override
             public void onClick(View v) {
-                Context context = v.getContext();
-                Intent intent = RoundActivity.newIntent(context, round.getId());
-                context.startActivity(intent);
+                callbacks.onRoundSelected(round);
             }
-
         }
 
         public RoundAdapter(List<Round> rounds){

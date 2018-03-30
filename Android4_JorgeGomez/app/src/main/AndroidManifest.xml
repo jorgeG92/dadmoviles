@@ -8,20 +8,23 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-       <activity
-            android:name=".activities.RoundListActivity"
-            android:label="@string/app_name"
-            android:configChanges="orientation|screenSize">
+       <activity android:name="eps.android4_jorgegomez.activities.RoundListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".activities.RoundActivity">
+
+        <activity android:name="eps.android4_jorgegomez.activities.RoundActivity"
+            android:parentActivityName=".activities.RoundListActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.RoundListActivity"/>
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
     </application>
 </manifest>
+
+

@@ -1,8 +1,10 @@
 <resources>
-    <string name="app_name">Android4_JorgeGomez</string>
-    <string name="round_already_finished">La partida ya esta acabada</string>
-    <string name="game_over">Fin del juego</string>
-    <string name="invalid_movement">Movimiento no valido</string>
+    <string name="app_name">Conecta4</string>
     <string name="title">Conecta 4</string>
+    <string name="game_over">Fin del juego</string>
+    <string name="game_over_message">¿Una ronda nueva?</string>
+    <string name="round_already_finished">La partida ya esta acabada</string>
+    <string name="invalid_movement">Movimiento no valido</string>
     <string name="round_title">Conecta 4R</string>
+    <string name="new_round">Ronda nueva</string>
 </resources>

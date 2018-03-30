@@ -6,13 +6,15 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 
 import eps.android4_jorgegomez.R;
+import eps.android4_jorgegomez.model.Round;
 
 /**
  * 9.intenciones
  */
-public class RoundActivity extends AppCompatActivity{
+public class RoundActivity extends AppCompatActivity implements RoundFragment.Callbacks{
 
     public static final String EXTRA_ROUND_ID = "es.uam.eps.dadm.er9.round_id";
 
@@ -30,6 +32,9 @@ public class RoundActivity extends AppCompatActivity{
             getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, roundFragment).commit();
 
         }
+
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
     }
 
     public static Intent newIntent(Context packageContext, String roundId){
@@ -38,5 +43,7 @@ public class RoundActivity extends AppCompatActivity{
         return intent;
     }
 
+    @Override
+    public void onRoundUpdated(Round round) { }
 
 }
