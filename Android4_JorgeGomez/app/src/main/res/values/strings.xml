@@ -7,4 +7,5 @@
     <string name="invalid_movement">Movimiento no valido</string>
     <string name="round_title">Conecta 4R</string>
     <string name="new_round">Ronda nueva</string>
+    <string name="round_restarted">Ronda reiniciada</string>
 </resources>

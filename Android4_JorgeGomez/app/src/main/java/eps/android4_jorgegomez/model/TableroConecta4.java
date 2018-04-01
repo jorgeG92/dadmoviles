@@ -1,6 +1,8 @@
 package eps.android4_jorgegomez.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+
 import es.uam.eps.multij.ExcepcionJuego;
 import es.uam.eps.multij.Movimiento;
 import es.uam.eps.multij.Tablero;
@@ -373,6 +375,15 @@ public class TableroConecta4 extends Tablero {
             }
         }
         return contadorFichas;
+    }
+
+    @Override
+    public boolean reset(){
+        for (int f = 0; f < tamanioFilas; f++)
+            for(int c = 0; c < tamanioColumnas; c++)
+                tablero[f][c] = -1;
+        this.numJugadas = 0;
+        return true;
     }
 
 }

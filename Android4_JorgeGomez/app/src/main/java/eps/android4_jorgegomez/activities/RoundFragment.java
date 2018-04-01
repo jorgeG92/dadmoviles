@@ -3,6 +3,8 @@ package eps.android4_jorgegomez.activities;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -128,6 +130,23 @@ public class RoundFragment extends Fragment implements PartidaListener{
                 button = (ERButton) getView().findViewById(ids[i][j]);
                 button.setOnClickListener(local);
             }
+
+        FloatingActionButton resetButton = (FloatingActionButton) getView().findViewById(R.id.reset_found_fab);
+
+        resetButton.setOnClickListener(
+                new View.OnClickListener(){
+                    @Override
+                    public void onClick(View v) {
+                        if (round.getBoard().getEstado() != Tablero.EN_CURSO){
+                            Snackbar.make(getView(), R.string.round_already_finished, Snackbar.LENGTH_SHORT).show();
+                        }
+                        round.getBoard().reset();
+                        startRound();
+                        callbacks.onRoundUpdated(round);
+                        updateUI();
+                        Snackbar.make(getView(), R.string.round_restarted, Snackbar.LENGTH_SHORT).show();
+                    }
+                });
     }
 
 
