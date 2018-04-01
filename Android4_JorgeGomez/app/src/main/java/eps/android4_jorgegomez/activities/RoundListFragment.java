@@ -1,7 +1,6 @@
 package eps.android4_jorgegomez.activities;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -29,6 +28,7 @@ public class RoundListFragment extends Fragment {
     private Callbacks callbacks;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
 
         View view = inflater.inflate(R.layout.fragment_round_list, container, false);
 

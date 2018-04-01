@@ -5,17 +5,12 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
-
-import java.util.List;
+import android.view.MenuItem;
 
 import eps.android4_jorgegomez.R;
 import eps.android4_jorgegomez.model.Round;
-import eps.android4_jorgegomez.model.RoundRepository;
 
 
 public class RoundListActivity extends AppCompatActivity implements RoundListFragment.Callbacks, RoundFragment.Callbacks{
@@ -56,10 +51,6 @@ public class RoundListActivity extends AppCompatActivity implements RoundListFra
         RoundListFragment roundListFragment = (RoundListFragment)
                 fragmentManager.findFragmentById(R.id.fragment_container);
         roundListFragment.updateUI();
-    }
 
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
-        return true;
     }
 }

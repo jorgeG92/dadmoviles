@@ -46,6 +46,8 @@ public class TableroConecta4 extends Tablero {
     private int tamanioFilas;
     /** Entero que contiene el numero de columanas y de filas del juego*/
     private int tamanioColumnas;
+    /** Entero que indica el numero de fichas seguidas para ganar*/
+    private int maxFichas;
     public static final int JUGADOR1=0;
     public static final int JUGADOR2=1;
     public static final int VACIO=-1;
@@ -75,6 +77,7 @@ public class TableroConecta4 extends Tablero {
         /* introducido por parametro */
         tamanioFilas=tam_tablero;
         tamanioColumnas=tam_tablero;
+        maxFichas=tam_tablero;
         tablero = new int[tamanioFilas][tamanioColumnas];
         estado = Tablero.EN_CURSO;
         iniTablero();
@@ -193,7 +196,7 @@ public class TableroConecta4 extends Tablero {
                 if (tablero[fila][col]!=-1)
                     mesa += "["+tablero[fila][col]+"]";
                 else
-                    mesa += "[ ]";
+                    mesa += "[-]";
             }
             mesa += "\n";
         }
@@ -243,14 +246,11 @@ public class TableroConecta4 extends Tablero {
          * no utilicemos un indice negativo*/
         if(fila == -1) fila +=1;
 
-        if (contadorColumna(columna, fila)>=4) return Tablero.FINALIZADA; //Condicion de victoria
+        if (contadorColumna(columna, fila)>=maxFichas) return Tablero.FINALIZADA; //Condicion de victoria
+        if (contadorFila(columna, fila)>=maxFichas) return Tablero.FINALIZADA; //Condicion de victoria
+        if (contadorDiagonalAscendente(columna, fila)>=maxFichas) return Tablero.FINALIZADA; //Condicion de victoria
+        if (contadorDiagonalDescendente(columna, fila)>=maxFichas) return Tablero.FINALIZADA;
 
-        if (contadorFila(columna, fila)>=4) return Tablero.FINALIZADA; //Condicion de victoria
-
-        if (contadorDiagonalAscendente(columna, fila)>=4) return Tablero.FINALIZADA; //Condicion de victoria
-
-        //Evaluacion final de la partida
-        if (contadorDiagonalDescendente(columna, fila)>=4) return Tablero.FINALIZADA;
         if(movimientosValidos().isEmpty()) return Tablero.TABLAS;
         return Tablero.EN_CURSO;
     }
@@ -273,8 +273,13 @@ public class TableroConecta4 extends Tablero {
      */
     private int contadorColumna(int columna, int fila) {
         int contadorFichas = 0;
-        for (int f = fila; f < fila + 4; f++) {
-            if (f > tamanioFilas - 1 || (tablero[f][columna] != turno)) break;
+        for(int f = fila; f > fila-4; f--) { 	//Lado izquierdo
+            if(f<0 || (tablero[fila][f]!=turno)) break;
+            else contadorFichas += 1;
+        }
+
+        for(int f = columna+1; f < columna+4; f++) { 	//Lado derecho
+            if(f>tamanioColumnas-1 || (tablero[fila][f]!=turno)) break;
             else contadorFichas += 1;
         }
         return contadorFichas;

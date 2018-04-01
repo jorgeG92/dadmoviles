@@ -10,7 +10,7 @@ public class Round {
     private String id;
     private String title;
     private String date;
-    private Tablero board;
+    private TableroConecta4 board;
 
     public Round(int size) {
         this.size = size;
@@ -46,11 +46,11 @@ public class Round {
         this.date = date;
     }
 
-    public Tablero getBoard() {
+    public TableroConecta4 getBoard() {
         return board;
     }
 
-    public void setBoard(Tablero board) {
+    public void setBoard(TableroConecta4 board) {
         this.board = board;
     }
 }

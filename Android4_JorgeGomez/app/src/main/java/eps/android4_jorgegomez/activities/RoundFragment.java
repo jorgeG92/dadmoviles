@@ -1,26 +1,29 @@
 package eps.android4_jorgegomez.activities;
 
+import java.util.ArrayList;
+
+import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.TextView;
-
-import java.util.ArrayList;
 
 import eps.android4_jorgegomez.R;
 import eps.android4_jorgegomez.model.Round;
 import eps.android4_jorgegomez.model.RoundRepository;
 import eps.android4_jorgegomez.model.TableroConecta4;
+import eps.android4_jorgegomez.view.ERButton;
+
 import es.uam.eps.multij.Evento;
+import es.uam.eps.multij.Partida;
+import es.uam.eps.multij.Tablero;
+import es.uam.eps.multij.PartidaListener;
 import es.uam.eps.multij.Jugador;
 import es.uam.eps.multij.JugadorAleatorio;
-import es.uam.eps.multij.Partida;
-import es.uam.eps.multij.PartidaListener;
-import es.uam.eps.multij.Tablero;
+
+
 
 public class RoundFragment extends Fragment implements PartidaListener{
 
@@ -42,6 +45,17 @@ public class RoundFragment extends Fragment implements PartidaListener{
         void onRoundUpdated(Round round);
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        callbacks = (Callbacks) context;
+    }
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        callbacks = null;
+    }
+
     public static RoundFragment newInstance(String roundId) {
         Bundle args = new Bundle();
         args.putString(ARG_ROUND_ID, roundId);
@@ -59,6 +73,7 @@ public class RoundFragment extends Fragment implements PartidaListener{
             round = RoundRepository.get(getActivity()).getRound(roundId);
             size = round.getSize();
         }
+
     }
 
     @Override
@@ -70,10 +85,51 @@ public class RoundFragment extends Fragment implements PartidaListener{
         return rootView;
     }
 
-    public void updateUI(){
-
-        //Aqui como actualizamos los botones???
+    @Override
+    public void onStart(){
+        super.onStart();
+        startRound();
     }
+
+    void startRound() {
+        ArrayList<Jugador> players = new ArrayList<Jugador>();
+        JugadorAleatorio randomPlayer = new JugadorAleatorio("Random player");
+        JugadorLocal localPlayer = new JugadorLocal();
+        players.add(randomPlayer);
+        players.add(localPlayer);
+
+        game = new Partida(round.getBoard(), players);
+        game.addObservador(this);
+        localPlayer.setPartida(game);
+        registerListeners(localPlayer);
+
+        if (game.getTablero().getEstado() == Tablero.EN_CURSO)
+            game.comenzar();
+}
+
+    private void updateUI() {
+        ERButton button;
+        for (int i = 0; i < size; i++)
+            for (int j = 0; j < size; j++) {
+                button = (ERButton) getView().findViewById(ids[i][j]);
+                    if (round.getBoard().getTablero(i, j) == TableroConecta4.JUGADOR1)
+                        button.randomPlayer();
+                    else if (round.getBoard().getTablero(i, j) == TableroConecta4.VACIO)
+                        button.notClicked();
+                    else
+                        button.human();
+                }
+    }
+
+    private void registerListeners(JugadorLocal local) {
+        ERButton button;
+        for (int i = 0; i < size; i++)
+            for (int j = 0; j < size; j++) {
+                button = (ERButton) getView().findViewById(ids[i][j]);
+                button.setOnClickListener(local);
+            }
+    }
+
 
     @Override
     public void onCambioEnPartida(Evento evento) {
