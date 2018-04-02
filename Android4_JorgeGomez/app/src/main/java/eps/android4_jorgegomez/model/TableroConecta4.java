@@ -102,8 +102,9 @@ public class TableroConecta4 extends Tablero {
         ultimoMovimiento = m4;
         /*Comprobamos el estado de la partida*/
         estado = checkEstadoTablero();
-        if (estado != EN_CURSO)
+        if (estado != EN_CURSO) {
             System.out.println(this.toString());
+        }
         else
             cambiaTurno();
     }
@@ -383,6 +384,7 @@ public class TableroConecta4 extends Tablero {
             for(int c = 0; c < tamanioColumnas; c++)
                 tablero[f][c] = -1;
         this.numJugadas = 0;
+        estado = Tablero.EN_CURSO;
         return true;
     }
 

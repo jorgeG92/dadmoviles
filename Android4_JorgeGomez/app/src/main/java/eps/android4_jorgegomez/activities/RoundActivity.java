@@ -31,7 +31,6 @@ public class RoundActivity extends AppCompatActivity implements RoundFragment.Ca
             String roundId = getIntent().getStringExtra(EXTRA_ROUND_ID);
             RoundFragment roundFragment = RoundFragment.newInstance(roundId);
             getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, roundFragment).commit();
-
         }
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);

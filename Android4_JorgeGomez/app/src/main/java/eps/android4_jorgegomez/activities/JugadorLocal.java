@@ -5,18 +5,14 @@ import android.view.View;
 
 import eps.android4_jorgegomez.R;
 import eps.android4_jorgegomez.model.MovimientoConecta4;
+import eps.android4_jorgegomez.view.ERView;
 import es.uam.eps.multij.AccionMover;
 import es.uam.eps.multij.Evento;
 import es.uam.eps.multij.Jugador;
 import es.uam.eps.multij.Partida;
 import es.uam.eps.multij.Tablero;
 
-public class JugadorLocal implements View.OnClickListener, Jugador {
-    private final int ids[][] = {
-            {R.id.er1, R.id.er2, R.id.er3},
-            {R.id.er4, R.id.er5, R.id.er6},
-            {R.id.er7, R.id.er8, R.id.er9}};
-    private int SIZE = 3;
+public class JugadorLocal implements ERView.OnPlayListener, Jugador {
     private String nombre;
     Partida game;
 
@@ -38,33 +34,18 @@ public class JugadorLocal implements View.OnClickListener, Jugador {
     @Override
     public void onCambioEnPartida(Evento evento) {
     }
-    private int fromViewToI(View view) {
-        for (int i = 0; i < SIZE; i++)
-            for (int j = 0; j < SIZE; j++)
-                if (view.getId() == ids[i][j])
-                    return i;
-        return -1;
-    }
-    private int fromViewToJ(View view) {
-        for (int i = 0; i < SIZE; i++)
-            for (int j = 0; j < SIZE; j++)
-                if (view.getId() == ids[i][j])
-                    return j;
-        return -1;
-    }
+
     @Override
-    public void onClick(View v) {
+    public void onPlay(int row, int column) {
         try {
             if (game.getTablero().getEstado() != Tablero.EN_CURSO) {
-                Snackbar.make(v, R.string.round_already_finished,
-                        Snackbar.LENGTH_SHORT).show();
                 return;
             }
             MovimientoConecta4 m;
-            m = new MovimientoConecta4(fromViewToI(v), fromViewToJ(v));
-            game.realizaAccion(new AccionMover(this, m));
+            m = new MovimientoConecta4(row, column);
+            if (game.getTablero().esValido(m))
+                game.realizaAccion(new AccionMover(this, m));
         } catch (Exception e) {
-            Snackbar.make(v, R.string.invalid_movement, Snackbar.LENGTH_SHORT).show();
         }
     }
 }

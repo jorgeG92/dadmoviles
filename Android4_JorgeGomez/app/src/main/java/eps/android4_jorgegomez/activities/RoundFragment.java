@@ -10,14 +10,15 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import eps.android4_jorgegomez.R;
 import eps.android4_jorgegomez.model.Round;
 import eps.android4_jorgegomez.model.RoundRepository;
-import eps.android4_jorgegomez.model.TableroConecta4;
-import eps.android4_jorgegomez.view.ERButton;
 
+import eps.android4_jorgegomez.view.ERView;
 import es.uam.eps.multij.Evento;
 import es.uam.eps.multij.Partida;
 import es.uam.eps.multij.Tablero;
@@ -29,16 +30,12 @@ import es.uam.eps.multij.JugadorAleatorio;
 
 public class RoundFragment extends Fragment implements PartidaListener{
 
-    public static final String ARG_ROUND_ID = "es.uam.eps.dadm.er10.round_id";
-
-    private final int ids[][] = {
-            {R.id.er1, R.id.er2, R.id.er3},
-            {R.id.er4, R.id.er5, R.id.er6},
-            {R.id.er7, R.id.er8, R.id.er9}};
+    public static final String ARG_ROUND_ID = "es.uam.eps.dadm.er15.round_id";
 
     private int size;
     private Round round;
     private Partida game;
+    private ERView boardView;
     private Callbacks callbacks;
 
     public RoundFragment() { }
@@ -52,6 +49,7 @@ public class RoundFragment extends Fragment implements PartidaListener{
         super.onAttach(context);
         callbacks = (Callbacks) context;
     }
+
     @Override
     public void onDetach() {
         super.onDetach();
@@ -75,13 +73,11 @@ public class RoundFragment extends Fragment implements PartidaListener{
             round = RoundRepository.get(getActivity()).getRound(roundId);
             size = round.getSize();
         }
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View rootView = inflater.inflate(R.layout.fragment_round, container,
-                false);
+        final View rootView = inflater.inflate(R.layout.fragment_round, container, false);
         TextView roundTitleTextView = (TextView) rootView.findViewById(R.id.round_title);
         roundTitleTextView.setText(round.getTitle());
         return rootView;
@@ -102,37 +98,20 @@ public class RoundFragment extends Fragment implements PartidaListener{
 
         game = new Partida(round.getBoard(), players);
         game.addObservador(this);
+
         localPlayer.setPartida(game);
+        boardView = (ERView) getView().findViewById(R.id.board_erview);
+        boardView.setBoard(size, round.getBoard());
+        boardView.setOnPlayListener(localPlayer);
         registerListeners(localPlayer);
 
         if (game.getTablero().getEstado() == Tablero.EN_CURSO)
             game.comenzar();
-}
-
-    private void updateUI() {
-        ERButton button;
-        for (int i = 0; i < size; i++)
-            for (int j = 0; j < size; j++) {
-                button = (ERButton) getView().findViewById(ids[i][j]);
-                    if (round.getBoard().getTablero(i, j) == TableroConecta4.JUGADOR1)
-                        button.randomPlayer();
-                    else if (round.getBoard().getTablero(i, j) == TableroConecta4.VACIO)
-                        button.notClicked();
-                    else
-                        button.human();
-                }
     }
 
+
     private void registerListeners(JugadorLocal local) {
-        ERButton button;
-        for (int i = 0; i < size; i++)
-            for (int j = 0; j < size; j++) {
-                button = (ERButton) getView().findViewById(ids[i][j]);
-                button.setOnClickListener(local);
-            }
-
-        FloatingActionButton resetButton = (FloatingActionButton) getView().findViewById(R.id.reset_found_fab);
-
+        FloatingActionButton resetButton = getView().findViewById(R.id.reset_found_fab);
         resetButton.setOnClickListener(
                 new View.OnClickListener(){
                     @Override
@@ -143,22 +122,21 @@ public class RoundFragment extends Fragment implements PartidaListener{
                         round.getBoard().reset();
                         startRound();
                         callbacks.onRoundUpdated(round);
-                        updateUI();
+                        boardView.invalidate();
                         Snackbar.make(getView(), R.string.round_restarted, Snackbar.LENGTH_SHORT).show();
                     }
                 });
     }
 
-
     @Override
     public void onCambioEnPartida(Evento evento) {
         switch (evento.getTipo()) {
             case Evento.EVENTO_CAMBIO:
-                updateUI();
+                boardView.invalidate();
                 callbacks.onRoundUpdated(round);
                 break;
             case Evento.EVENTO_FIN:
-                updateUI();
+                boardView.invalidate();
                 callbacks.onRoundUpdated(round);
                 new AlertDialogFragment().show(getActivity().getSupportFragmentManager(),"ALERT DIALOG");
                 break;
