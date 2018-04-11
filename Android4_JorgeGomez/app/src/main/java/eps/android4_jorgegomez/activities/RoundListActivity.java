@@ -5,9 +5,8 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 
 import eps.android4_jorgegomez.R;
 import eps.android4_jorgegomez.model.Round;
@@ -31,6 +30,7 @@ public class RoundListActivity extends AppCompatActivity implements RoundListFra
         }
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
+        PreferenceManager.setDefaultValues(this, R.xml.settings, false);
     }
 
     @Override
@@ -44,6 +44,12 @@ public class RoundListActivity extends AppCompatActivity implements RoundListFra
                     .replace(R.id.detail_fragment_container, roundFragment)
                     .commit();
         }
+    }
+
+    @Override
+    public void onPreferencesSelected() {
+        Intent intent = new Intent(this, ERPreferenceActivity.class);
+        startActivity(intent);
     }
 
     @Override

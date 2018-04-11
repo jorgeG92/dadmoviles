@@ -68,15 +68,17 @@ public class RoundListFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_item_new_round:
-                Round round = new Round(RoundRepository.SIZE);
+                Round round = new Round(Integer.parseInt(ERPreferenceActivity.getBoardSize(getActivity())));
                 RoundRepository.get(getActivity()).addRound(round);
                 updateUI();
+                return true;
+            case R.id.menu_item_settings:
+                callbacks.onPreferencesSelected();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
-
 
     public void updateUI() {
         RoundRepository repository = RoundRepository.get(getActivity());
@@ -91,6 +93,7 @@ public class RoundListFragment extends Fragment {
 
     public interface Callbacks {
             void onRoundSelected(Round round);
+            void onPreferencesSelected();
     }
 
     private void setCardListener(View view) {
@@ -110,7 +113,6 @@ public class RoundListFragment extends Fragment {
                 new RecyclerItemClickListener(getActivity(), onItemClickListener);
         roundRecyclerView.addOnItemTouchListener(listener);
     }
-
 
     public class RoundAdapter extends RecyclerView.Adapter<RoundAdapter.RoundHolder>{
 

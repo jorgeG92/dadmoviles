@@ -8,4 +8,12 @@
     <string name="round_title">Conecta 4R</string>
     <string name="new_round">Ronda nueva</string>
     <string name="round_restarted">Ronda reiniciada</string>
+    <string name="list_preference_summary">Elige el tamaño del tablero</string>
+    <string name="list_preference_title">Tamaño del tablero</string>
+    <string name="checkbox_preference_summary">Pulsa si quieres escuchar musica</string>
+    <string name="checkbox_preference_title">Musica</string>
+    <string name="settings">Configuracion</string>
+    <string name="level_array_3">3 en raya</string>
+    <string name="level_array_4">Conecta 4</string>
+    <string name="level_array_5">Conecta 5</string>
 </resources>

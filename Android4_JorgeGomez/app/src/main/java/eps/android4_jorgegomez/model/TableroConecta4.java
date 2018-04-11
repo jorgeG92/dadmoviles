@@ -199,7 +199,7 @@ public class TableroConecta4 extends Tablero {
                 if (tablero[fila][col]!=-1)
                     mesa += "["+tablero[fila][col]+"]";
                 else
-                    mesa += "[-]";
+                    mesa += "[   ]";
             }
             mesa += "\n";
         }
@@ -241,9 +241,9 @@ public class TableroConecta4 extends Tablero {
      */
     private int checkEstadoTablero() {
         MovimientoConecta4 ultimoMovimiento = (MovimientoConecta4) this.ultimoMovimiento;
-        int contadorFichas = 0;
-        int fila = buscarFila(ultimoMovimiento.getColumna())+1;
+        //int fila = buscarFila(ultimoMovimiento.getColumna())+1;
         int columna = ultimoMovimiento.getColumna();
+        int fila = ultimoMovimiento.getFila();
 
         /* Compromabamos que si es la ultima ficha de la columna
          * no utilicemos un indice negativo*/

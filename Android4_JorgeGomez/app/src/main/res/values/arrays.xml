@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="levelsArray">
+        <item>@string/level_array_3</item>
+        <item>@string/level_array_4</item>
+        <item>@string/level_array_5</item>
+    </string-array>
+    <string-array name="levelsValues">
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+</resources>

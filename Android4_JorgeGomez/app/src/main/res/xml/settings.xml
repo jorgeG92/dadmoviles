@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="Ajustes del juego">
+        <ListPreference
+            android:defaultValue="2"
+            android:entries="@array/levelsArray"
+            android:entryValues="@array/levelsValues"
+            android:key="boardsize"
+            android:summary="@string/list_preference_summary"
+            android:title="@string/list_preference_title"/>
+        <CheckBoxPreference
+            android:key="music"
+            android:summary="@string/checkbox_preference_summary"
+            android:title="@string/checkbox_preference_title"
+            android:defaultValue="true"/>
+    </PreferenceCategory>
+</PreferenceScreen>
