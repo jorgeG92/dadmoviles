@@ -2,13 +2,13 @@ package eps.android4_jorgegomez.model;
 
 import es.uam.eps.multij.Movimiento;
 
-/** Clase MovimientoConecta4 que extiende la clase Movimiento.
+/** Clase ConectMovement que extiende la clase Movimiento.
  * Orientada a ser utilizada unicamente para el juego Conecta 4
  *
  * @author Jorge Gomez Conde
  * @version 1.0 Febreo 18, 2018
  */
-public class MovimientoConecta4 extends Movimiento {
+public class ConectMovement extends Movimiento {
 
     /** Columna elegida por el jugador*/
     private int columna;
@@ -17,9 +17,9 @@ public class MovimientoConecta4 extends Movimiento {
     /** Constructor de MoviemientoConecta4
      * @param columna elegida por el jugador
      */
-    public MovimientoConecta4(int columna) { this.columna = columna; fila =-1; }
+    public ConectMovement(int columna) { this.columna = columna; fila =-1; }
 
-    public MovimientoConecta4(int fila, int columna) { this.columna = columna; this.fila=fila;}
+    public ConectMovement(int fila, int columna) { this.columna = columna; this.fila=fila;}
 
     @Override
     public String toString() {
@@ -30,7 +30,7 @@ public class MovimientoConecta4 extends Movimiento {
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof MovimientoConecta4))
+        if (!(o instanceof ConectMovement))
             return false;
         else
             return this.toString().equals(o.toString());

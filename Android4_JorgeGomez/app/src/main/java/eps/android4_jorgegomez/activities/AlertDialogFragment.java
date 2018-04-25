@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import eps.android4_jorgegomez.R;
 import eps.android4_jorgegomez.model.Round;
 import eps.android4_jorgegomez.model.RoundRepository;
+import eps.android4_jorgegomez.model.RoundRepositoryFactory;
 
 public class AlertDialogFragment extends DialogFragment {
 
@@ -23,16 +24,22 @@ public class AlertDialogFragment extends DialogFragment {
         alertDialogBuilder.setMessage(R.string.game_over_message);
         alertDialogBuilder.setPositiveButton("Yes",
                 new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
+                    public void onClick(final DialogInterface dialog, int which) {
+                        String size = ConectPreferenceActivity.getBoardSize(getActivity());
+                        final Round round = new Round(Integer.parseInt(size));
 
-                        Round round = new Round(RoundRepository.SIZE);
-                        RoundRepository.get(getActivity()).addRound(round);
+                        RoundRepository rr = RoundRepositoryFactory.createRepository(getActivity());
+                        RoundRepository.BooleanCallback bc = new RoundRepository.BooleanCallback(){
 
-                        if (activity instanceof RoundListActivity)
-                            ((RoundListActivity) activity).onRoundUpdated(round);
-                        else
-                            ((RoundActivity) activity).finish();
-                        dialog.dismiss();
+                            public void onResponse(boolean ok){
+                                if (activity instanceof RoundListActivity)
+                                    ((RoundListActivity) activity).onRoundUpdated();
+                                else
+                                    ((RoundActivity) activity).finish();
+                                dialog.dismiss();
+                            }
+                        };
+                        rr.addRound(round, bc);
                     }
                 });
 

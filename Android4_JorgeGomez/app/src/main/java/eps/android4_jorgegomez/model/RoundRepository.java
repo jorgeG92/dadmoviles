@@ -1,38 +1,35 @@
 package eps.android4_jorgegomez.model;
 
-import android.content.Context;
-
-import java.util.ArrayList;
 import java.util.List;
 
-public class RoundRepository {
+public interface RoundRepository {
 
-    public static final int SIZE = 4;
-    private static RoundRepository repository;
-    private List<Round> rounds;
+    void open() throws Exception;
 
-    public static RoundRepository get(Context context) {
-        if (repository == null) {
-            repository = new RoundRepository(context);
-        }
-        return repository;
+    void close();
+
+    interface LoginRegisterCallback{
+        void onLogin(String playerUuid);
+        void onError(String error);
     }
 
-    private RoundRepository(Context context) {
-        rounds = new ArrayList<Round>();
+    void login(String playername, String password, LoginRegisterCallback callback);
+
+    void register(String playername, String password, LoginRegisterCallback callback);
+
+    interface BooleanCallback {
+        void onResponse(boolean ok);
     }
 
-    public List<Round> getRounds() {
-        return rounds;
-    }
+    List<Round> getRounds(String playeruuid, String orderByField, String group,
+                   RoundsCallback callback);
 
-    public Round getRound(String id) {
-        for (Round round : rounds) {
-            if (round.getId().equals(id))
-                return round;
-        }
-        return null;
-    }
+    void addRound(Round round, BooleanCallback callback);
 
-    public void addRound(Round round) { rounds.add(round); }
+    void updateRound(Round round, BooleanCallback callback);
+
+    interface RoundsCallback {
+        void onResponse(List<Round> rounds);
+        void onError(String error);
+    }
 }

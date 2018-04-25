@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.Toolbar;
@@ -28,8 +29,11 @@ public class RoundListActivity extends AppCompatActivity implements RoundListFra
                     .add(R.id.fragment_container, fragment)
                     .commit();
         }
+
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
+        //ActionBar ab = getSupportActionBar();
+        //ab.setDisplayHomeAsUpEnabled(true);
         PreferenceManager.setDefaultValues(this, R.xml.settings, false);
     }
 
@@ -39,7 +43,10 @@ public class RoundListActivity extends AppCompatActivity implements RoundListFra
             Intent intent = RoundActivity.newIntent(this, round.getId());
             startActivity(intent);
         } else {
-            RoundFragment roundFragment = RoundFragment.newInstance(round.getId());
+            RoundFragment roundFragment = RoundFragment.newInstance(round.getId(), round.getFirstPlayerName(),
+                    round.getTitle(), round.getSize(), round.getDate(), round.getBoard().tableroToString() );
+
+            //Revisar new instance
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.detail_fragment_container, roundFragment)
                     .commit();
@@ -48,16 +55,22 @@ public class RoundListActivity extends AppCompatActivity implements RoundListFra
 
     @Override
     public void onPreferencesSelected() {
-        Intent intent = new Intent(this, ERPreferenceActivity.class);
+        Intent intent = new Intent(this, ConectPreferenceActivity.class);
         startActivity(intent);
     }
 
     @Override
-    public void onRoundUpdated(Round round) {
+    public void onNewRoundAdded(Round round) {
+
+    }
+
+    @Override
+    public void onRoundUpdated() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         RoundListFragment roundListFragment = (RoundListFragment)
                 fragmentManager.findFragmentById(R.id.fragment_container);
         roundListFragment.updateUI();
 
     }
+
 }

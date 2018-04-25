@@ -1,13 +1,12 @@
 package eps.android4_jorgegomez.model;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import es.uam.eps.multij.ExcepcionJuego;
 import es.uam.eps.multij.Movimiento;
 import es.uam.eps.multij.Tablero;
 
-/** Clase TableroConecta4 que extiende la clase Tablero.
+/** Clase ConectBoard que extiende la clase Tablero.
  * Orientada a ser utilizada unicamente para el juego Conecta 4.
  * Admite distintas dimesiones de tablero, siendo siempre la columna
  * una unidad mayor que las filas.
@@ -40,7 +39,7 @@ import es.uam.eps.multij.Tablero;
  * @author Jorge Gomez Conde
  * @version 1.0 Febrero 18, 2018
  */
-public class TableroConecta4 extends Tablero {
+public class ConectBoard extends Tablero {
 
     /** Array que contiene el tablero*/
     private int[][] tablero;
@@ -57,7 +56,7 @@ public class TableroConecta4 extends Tablero {
     /** Construtor de la clase por defecto
      *
      */
-    public TableroConecta4() {
+    public ConectBoard() {
 
         /** Inicializamos la tabla de movimientos validos */
         tamanioFilas=6;
@@ -73,7 +72,7 @@ public class TableroConecta4 extends Tablero {
      *
      * @param tam_tablero tamanio de las filas
      */
-    public TableroConecta4(int tam_tablero) {
+    public ConectBoard(int tam_tablero) {
 
         /* Inicializamos la tabla de movimientos validos en funcion del tamaño del tablero */
         /* introducido por parametro */
@@ -88,9 +87,9 @@ public class TableroConecta4 extends Tablero {
     @Override
     protected void mueve(Movimiento m) throws ExcepcionJuego {
         /* No se comprueba si es valido, se da por echo que lo es*/
-        MovimientoConecta4 m4;
-        if (m instanceof MovimientoConecta4)
-            m4 = (MovimientoConecta4) m;
+        ConectMovement m4;
+        if (m instanceof ConectMovement)
+            m4 = (ConectMovement) m;
         else
             m4 = null;
         int col =  m4.getColumna();
@@ -129,7 +128,7 @@ public class TableroConecta4 extends Tablero {
         for(int col=0; col<tamanioColumnas; col++) {
             for(int fil=0; fil<tamanioFilas; fil++){
                 if (tablero[fil][col] ==-1) {
-                    mV.add(new MovimientoConecta4(fil, col));
+                    mV.add(new ConectMovement(fil, col));
                 }
             }
         }
@@ -139,7 +138,7 @@ public class TableroConecta4 extends Tablero {
     @Override
     public String tableroToString() {
         String tableroString = new String();
-        MovimientoConecta4 m4 = (MovimientoConecta4) this.ultimoMovimiento;
+        ConectMovement m4 = (ConectMovement) this.ultimoMovimiento;
         /* Añadimos los datos del estado de la partida*/
         tableroString += this.tamanioFilas+":";
         tableroString += this.tamanioColumnas+":";
@@ -176,7 +175,7 @@ public class TableroConecta4 extends Tablero {
         if (Integer.parseInt( datos.split(":")[5])<0)
             ultimoMovimiento = null;
         else
-            ultimoMovimiento = new MovimientoConecta4(Integer.parseInt( datos.split(":")[5]));
+            ultimoMovimiento = new ConectMovement(Integer.parseInt( datos.split(":")[5]));
 
         //Extraer el tamaño de la fila y de la columna
         for(int fila=0; fila<tamanioFilas; fila++) {
@@ -184,7 +183,7 @@ public class TableroConecta4 extends Tablero {
             for(int columna=0; columna<tamanioColumnas; columna++ )
                 this.tablero[fila][columna] = Integer.parseInt( filaString.split("=")[columna] );
         }
-        estado = this.checkEstadoTablero();
+        this.estado = this.checkEstadoTablero();
         return;
     }
 
@@ -216,7 +215,7 @@ public class TableroConecta4 extends Tablero {
             if (tablero[fila][columna]==0) return JUGADOR1;
             else return JUGADOR2;
         }
-        return TableroConecta4.VACIO;
+        return ConectBoard.VACIO;
 
     }
 
@@ -240,7 +239,7 @@ public class TableroConecta4 extends Tablero {
      * @return estado del tablero (EN_CURSO, TABLAS, FINALIZADA)
      */
     private int checkEstadoTablero() {
-        MovimientoConecta4 ultimoMovimiento = (MovimientoConecta4) this.ultimoMovimiento;
+        ConectMovement ultimoMovimiento = (ConectMovement) this.ultimoMovimiento;
         //int fila = buscarFila(ultimoMovimiento.getColumna())+1;
         int columna = ultimoMovimiento.getColumna();
         int fila = ultimoMovimiento.getFila();

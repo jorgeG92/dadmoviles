@@ -10,10 +10,10 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import eps.android4_jorgegomez.R;
-import eps.android4_jorgegomez.model.TableroConecta4;
+import eps.android4_jorgegomez.model.ConectBoard;
 import es.uam.eps.multij.Tablero;
 
-public class ERView extends View {
+public class ConectView extends View {
 
     private final String DEBUG = "ERView";
     private int numero;
@@ -24,7 +24,7 @@ public class ERView extends View {
     private float widthOfTile;
     private float radio;
     private int size;
-    private TableroConecta4 board;
+    private ConectBoard board;
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -45,7 +45,7 @@ public class ERView extends View {
         setMeasuredDimension(width, height);
     }
 
-    public ERView(Context context, AttributeSet attrs) {
+    public ConectView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
@@ -90,9 +90,9 @@ public class ERView extends View {
     }
 
     private void setPaintColor(Paint paint, int i, int j) {
-        if (board.getTablero(i, j) == TableroConecta4.JUGADOR1)
+        if (board.getTablero(i, j) == ConectBoard.JUGADOR1)
             paint.setColor(Color.BLUE);
-        else if (board.getTablero(i, j) == TableroConecta4.VACIO)
+        else if (board.getTablero(i, j) == ConectBoard.VACIO)
             paint.setColor(Color.GRAY);
         else
             paint.setColor(Color.GREEN);
@@ -128,7 +128,7 @@ public class ERView extends View {
         this.onPlayListener = listener;
     }
 
-    public void setBoard(int size, TableroConecta4 board) {
+    public void setBoard(int size, ConectBoard board) {
         this.size = size;
         this.board = board;
     }

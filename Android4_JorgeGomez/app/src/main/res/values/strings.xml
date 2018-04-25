@@ -12,8 +12,26 @@
     <string name="list_preference_title">Tamaño del tablero</string>
     <string name="checkbox_preference_summary">Pulsa si quieres escuchar musica</string>
     <string name="checkbox_preference_title">Musica</string>
+    <string name="playername_summary">Establece el nombre de usuario</string>
+    <string name="playername_title">Nombre del jugador</string>
+
     <string name="settings">Configuracion</string>
     <string name="level_array_3">3 en raya</string>
     <string name="level_array_4">Conecta 4</string>
     <string name="level_array_5">Conecta 5</string>
+
+
+    <string name="login_first_text_view_text">Login</string>
+    <string name="login_first_edit_text_hint">Nombre de usuario</string>
+    <string name="login_second_edit_text_hint">Clave secreta</string>
+    <string name="login_login_button_text">Entrar</string>
+    <string name="login_cancel_button_text">Salir</string>
+    <string name="login_new_user_button_text">Nuevo usuario</string>
+    <string name="login_alert_dialog_title">Error</string>
+    <string name="login_alert_dialog_message">Login fallido</string>
+    <string name="login_alert_dialog_neutral_button_text">Inténtelo de nuevo</string>
+    <string name="error_reading_rounds">Error while reading rounds</string>
+    <string name="error_adding_round">"Error while adding round"</string>
+    <string name="error_updating_round">Error while updating round</string>
+    <string name="repository_opening_error">An error ocurred while opening repository</string>
 </resources>

@@ -16,7 +16,7 @@
             android:layout_margin="20dp"
             android:textAllCaps="true"
             android:textSize="@dimen/title_size" />
-        <eps.android4_jorgegomez.view.ERView
+        <eps.android4_jorgegomez.view.ConectView
             android:id="@+id/board_erview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

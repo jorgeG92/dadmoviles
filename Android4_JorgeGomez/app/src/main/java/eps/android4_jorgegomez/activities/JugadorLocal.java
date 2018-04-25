@@ -1,18 +1,14 @@
 package eps.android4_jorgegomez.activities;
 
-import android.support.design.widget.Snackbar;
-import android.view.View;
-
-import eps.android4_jorgegomez.R;
-import eps.android4_jorgegomez.model.MovimientoConecta4;
-import eps.android4_jorgegomez.view.ERView;
+import eps.android4_jorgegomez.model.ConectMovement;
+import eps.android4_jorgegomez.view.ConectView;
 import es.uam.eps.multij.AccionMover;
 import es.uam.eps.multij.Evento;
 import es.uam.eps.multij.Jugador;
 import es.uam.eps.multij.Partida;
 import es.uam.eps.multij.Tablero;
 
-public class JugadorLocal implements ERView.OnPlayListener, Jugador {
+public class JugadorLocal implements ConectView.OnPlayListener, Jugador {
     private String nombre;
     Partida game;
 
@@ -41,8 +37,8 @@ public class JugadorLocal implements ERView.OnPlayListener, Jugador {
             if (game.getTablero().getEstado() != Tablero.EN_CURSO) {
                 return;
             }
-            MovimientoConecta4 m;
-            m = new MovimientoConecta4(row, column);
+            ConectMovement m;
+            m = new ConectMovement(row, column);
             if (game.getTablero().esValido(m))
                 game.realizaAccion(new AccionMover(this, m));
         } catch (Exception e) {
