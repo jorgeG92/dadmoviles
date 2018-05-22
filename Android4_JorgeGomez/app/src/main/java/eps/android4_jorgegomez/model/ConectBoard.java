@@ -1,5 +1,8 @@
 package eps.android4_jorgegomez.model;
 
+import android.provider.Settings;
+import android.util.Log;
+
 import java.util.ArrayList;
 
 import es.uam.eps.multij.ExcepcionJuego;
@@ -239,21 +242,29 @@ public class ConectBoard extends Tablero {
      * @return estado del tablero (EN_CURSO, TABLAS, FINALIZADA)
      */
     private int checkEstadoTablero() {
+
         ConectMovement ultimoMovimiento = (ConectMovement) this.ultimoMovimiento;
+        if (ultimoMovimiento == null)
+            return Tablero.EN_CURSO;
+
         //int fila = buscarFila(ultimoMovimiento.getColumna())+1;
+
         int columna = ultimoMovimiento.getColumna();
         int fila = ultimoMovimiento.getFila();
 
         /* Compromabamos que si es la ultima ficha de la columna
          * no utilicemos un indice negativo*/
-        if(fila == -1) fila +=1;
+        if (fila == -1) fila += 1;
+        if (contadorColumna(columna, fila) >= maxFichas)
+            return Tablero.FINALIZADA; //Condicion de victoria
+        if (contadorFila(columna, fila) >= maxFichas)
+            return Tablero.FINALIZADA; //Condicion de victoria
+        if (contadorDiagonalAscendente(columna, fila) >= maxFichas)
+            return Tablero.FINALIZADA; //Condicion de victoria
+        if (contadorDiagonalDescendente(columna, fila) >= maxFichas) return Tablero.FINALIZADA;
 
-        if (contadorColumna(columna, fila)>=maxFichas) return Tablero.FINALIZADA; //Condicion de victoria
-        if (contadorFila(columna, fila)>=maxFichas) return Tablero.FINALIZADA; //Condicion de victoria
-        if (contadorDiagonalAscendente(columna, fila)>=maxFichas) return Tablero.FINALIZADA; //Condicion de victoria
-        if (contadorDiagonalDescendente(columna, fila)>=maxFichas) return Tablero.FINALIZADA;
+        if (movimientosValidos().isEmpty()) return Tablero.TABLAS;
 
-        if(movimientosValidos().isEmpty()) return Tablero.TABLAS;
         return Tablero.EN_CURSO;
     }
 
@@ -275,15 +286,16 @@ public class ConectBoard extends Tablero {
      */
     private int contadorColumna(int columna, int fila) {
         int contadorFichas = 0;
-        for(int f = fila; f > fila-4; f--) { 	//Lado izquierdo
-            if(f<0 || (tablero[fila][f]!=turno)) break;
+        for(int f = fila; f > fila-maxFichas; f--) { 	//Lado superior
+            if(f<0 || (tablero[f][columna]!=turno)) break;
             else contadorFichas += 1;
         }
 
-        for(int f = columna+1; f < columna+4; f++) { 	//Lado derecho
-            if(f>tamanioColumnas-1 || (tablero[fila][f]!=turno)) break;
+        for(int f = fila+1; f < fila+maxFichas; f++) { 	//Lado inferior
+            if(f>tamanioFilas-1 || (tablero[f][columna]!=turno)) break;
             else contadorFichas += 1;
         }
+        Log.d("DEBUG", "\n" + "Numero del contador M (F:" + String.valueOf(fila) + ", C:" + String.valueOf(columna) + "): " + String.valueOf(contadorFichas)+"\n\n" + this.toString());
         return contadorFichas;
     }
 
@@ -294,7 +306,7 @@ public class ConectBoard extends Tablero {
      */
     private int contadorFila(int columna, int fila){
         int contadorFichas = 0;
-        for(int c = columna; c > columna-4; c--) { 	//Lado izquierdo
+        for(int c = columna; c > columna-maxFichas; c--) { 	//Lado izquierdo
             if(c<0 || (tablero[fila][c]!=turno)) break;
             else contadorFichas += 1;
         }

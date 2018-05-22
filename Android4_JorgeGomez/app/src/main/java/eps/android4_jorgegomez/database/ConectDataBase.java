@@ -123,7 +123,7 @@ public class ConectDataBase implements RoundRepository {
 
     private ContentValues getContentValues(Round round) {
         ContentValues values = new ContentValues();
-        values.put(RoundTable.Cols.PLAYERUUID, round.getPlayerUUID());
+        values.put(RoundTable.Cols.PLAYERUUID, round.getFirstPlayerUUID());
         values.put(RoundTable.Cols.ROUNDUUID, round.getId());
         values.put(RoundTable.Cols.DATE, round.getDate());
         values.put(RoundTable.Cols.TITLE, round.getTitle());
@@ -180,7 +180,7 @@ public class ConectDataBase implements RoundRepository {
 
         while (!cursor.isAfterLast()) {
             Round round = cursor.getRound();
-            if (round.getPlayerUUID().equals(playeruuid))
+            if (round.getFirstPlayerUUID().equals(playeruuid))
                 rounds.add(round);
             cursor.moveToNext();
         }

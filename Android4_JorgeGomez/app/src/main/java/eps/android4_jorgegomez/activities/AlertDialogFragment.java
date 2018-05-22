@@ -27,8 +27,8 @@ public class AlertDialogFragment extends DialogFragment {
                     public void onClick(final DialogInterface dialog, int which) {
                         String size = ConectPreferenceActivity.getBoardSize(getActivity());
                         final Round round = new Round(Integer.parseInt(size));
-
-                        RoundRepository rr = RoundRepositoryFactory.createRepository(getActivity());
+                        boolean offLineFlag = ConectPreferenceActivity.getGameMode(getActivity()).equals(ConectPreferenceActivity.GAMEMODE_DEFAULT);
+                        RoundRepository rr = RoundRepositoryFactory.createRepository(getActivity(),offLineFlag);
                         RoundRepository.BooleanCallback bc = new RoundRepository.BooleanCallback(){
 
                             public void onResponse(boolean ok){

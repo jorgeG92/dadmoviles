@@ -14,4 +14,10 @@
         android:title="@string/settings"
         app:showAsAction="ifRoom|withText"/>
 
+    <item
+        android:id="@+id/menu_item_close_session"
+        android:icon="@android:drawable/ic_menu_close_clear_cancel"
+        android:title="@string/close_session"
+        app:showAsAction="ifRoom|withText"/>
+
 </menu>

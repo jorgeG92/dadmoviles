@@ -14,12 +14,14 @@ import eps.android4_jorgegomez.R;
 public class ConectPreferenceActivity extends AppCompatActivity {
 
     public final static String BOARDSIZE_KEY = "boardsize";
-    public final static String BOARDSIZE_DEFAULT = "0";
+    public final static String BOARDSIZE_DEFAULT = "4";
     public final static String PLAYERNAME_KEY = "playername";
-    public final static String PLAYER_PASS = "password";
     public final static String PLAYERNAME_DEFAULT = "default";
+    public final static String PLAYERPASS_KEY = "password";
     public final static String PLAYERID_KEY = "player_id";
     public final static String PLAYERID_DEFAULT = "0000";
+    public final static String GAMEMODE_KEY = "gamemode";
+    public final static String GAMEMODE_DEFAULT = "Off-Line";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +52,14 @@ public class ConectPreferenceActivity extends AppCompatActivity {
         editor.commit();
     }
 
+    public static void setPlayerName(Context context, String pass){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putString(ConectPreferenceActivity.PLAYERNAME_KEY, pass);
+        editor.commit();
+    }
+
     public static String getPlayerName(Context context){
         return PreferenceManager.getDefaultSharedPreferences(context).getString(PLAYERNAME_KEY, PLAYERNAME_DEFAULT);
     }
@@ -66,19 +76,23 @@ public class ConectPreferenceActivity extends AppCompatActivity {
         return PreferenceManager.getDefaultSharedPreferences(context).getString(PLAYERID_KEY, PLAYERID_DEFAULT);
     }
 
-    public static void setPlayerName(Context context, String pass){
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-
-        editor.putString(ConectPreferenceActivity.PLAYER_PASS, pass);
-        editor.commit();
-    }
-
     public static void setPlayerPassword(Context context, String pass){
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
-        editor.putString(ConectPreferenceActivity.PLAYER_PASS, pass);
+        editor.putString(ConectPreferenceActivity.PLAYERPASS_KEY, pass);
+        editor.commit();
+    }
+
+    public static String getGameMode(Context context){
+        return PreferenceManager.getDefaultSharedPreferences(context).getString(GAMEMODE_KEY, GAMEMODE_DEFAULT);
+    }
+
+    public static void setGameMode(Context context, String mode){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putString(ConectPreferenceActivity.GAMEMODE_KEY, mode);
         editor.commit();
     }
 

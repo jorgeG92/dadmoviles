@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "306247966924",
+    "firebase_url": "https://conectando4-18.firebaseio.com",
+    "project_id": "conectando4-18",
+    "storage_bucket": "conectando4-18.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:306247966924:android:debe9ad1db6dea76",
+        "android_client_info": {
+          "package_name": "eps.android4_jorgegomez"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "306247966924-2hlcl32fo536qp0balnbhpshml1gk4lv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "eps.android4_jorgegomez",
+            "certificate_hash": "d11ad5b1d99501c63fc771fcfec7e0c5ea358b59"
+          }
+        },
+        {
+          "client_id": "306247966924-086567jmsorqpcsa1g0fr27cencf5d3m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJg0iu8QSmZyQxZ86SKPafht6bnH4XrPM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "306247966924-086567jmsorqpcsa1g0fr27cencf5d3m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

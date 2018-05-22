@@ -34,10 +34,11 @@ public class RoundActivity extends AppCompatActivity implements RoundFragment.Ca
         if (fragment == null) {
             String firstPlayerName = getIntent().getStringExtra(EXTRA_ROUND_FIRSTPLAYERNAME);
             String roundTitle = getIntent().getStringExtra(EXTRA_ROUND_TITLE);
-            int roundSize = getIntent().getIntExtra(EXTRA_ROUND_SIZE, 0);
+            int roundSize = getIntent().getIntExtra(EXTRA_ROUND_SIZE, 4);
             String roundDate = getIntent().getStringExtra(EXTRA_ROUND_DATE);
             String roundBoard = getIntent().getStringExtra(EXTRA_ROUND_BOARD);
             String roundId = getIntent().getStringExtra(EXTRA_ROUND_ID);
+
             RoundFragment roundFragment = RoundFragment.newInstance(roundId, firstPlayerName, roundTitle,
                     roundSize, roundDate, roundBoard); //Faltan el resto de argumentos
             getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, roundFragment).commit();
@@ -49,14 +50,20 @@ public class RoundActivity extends AppCompatActivity implements RoundFragment.Ca
         ab.setDisplayHomeAsUpEnabled(true);
     }
 
-    public static Intent newIntent(Context packageContext, String roundId){
+    public static Intent newIntent(Context packageContext, String roundId, String firstPlayer,
+                                   String title, int size, String date, String board){
         Intent intent = new Intent(packageContext, RoundActivity.class);
+
         intent.putExtra(EXTRA_ROUND_ID, roundId);
+        intent.putExtra(EXTRA_ROUND_FIRSTPLAYERNAME, firstPlayer);
+        intent.putExtra(EXTRA_ROUND_TITLE,title);
+        intent.putExtra(EXTRA_ROUND_SIZE, size);
+        intent.putExtra(EXTRA_ROUND_DATE, date);
+        intent.putExtra(EXTRA_ROUND_BOARD, board);
+
         return intent;
     }
 
     @Override
-    public void onRoundUpdated() {
-
-    }
+    public void onRoundUpdated() { }
 }

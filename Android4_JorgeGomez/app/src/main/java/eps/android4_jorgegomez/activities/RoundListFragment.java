@@ -16,13 +16,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import eps.android4_jorgegomez.R;
 import eps.android4_jorgegomez.model.Round;
 import eps.android4_jorgegomez.model.RoundRepository;
 import eps.android4_jorgegomez.model.RoundRepositoryFactory;
+import eps.android4_jorgegomez.view.ConectView;
 
 
 public class RoundListFragment extends Fragment {
@@ -74,13 +74,14 @@ public class RoundListFragment extends Fragment {
             case R.id.menu_item_new_round:
                 int size = Integer.parseInt(ConectPreferenceActivity.getBoardSize(getActivity()));
                 final Round round = new Round(size);
-                round.setPlayerUUID(ConectPreferenceActivity.getPlayerUUID(getActivity()));
-                round.setFirstPlayerName("random");
-
-                round.setSecondPlayerName(ConectPreferenceActivity.getPlayerName(getActivity()));
-
+                round.setFirstPlayerUUID(ConectPreferenceActivity.getPlayerUUID(getActivity()));
+                round.setFirstPlayerName(ConectPreferenceActivity.getPlayerName(getActivity()));
+                //Podriamos dar a elegir el jugador con el que jugar
+                round.setSecondPlayerName("ElRandom");
+                round.setSecondPlayerUUID("000000001000000000");
+                boolean offLineFlag = ConectPreferenceActivity.getGameMode(getActivity()).equals(ConectPreferenceActivity.GAMEMODE_DEFAULT);
                 RoundRepository repository =
-                        RoundRepositoryFactory.createRepository(getActivity());
+                        RoundRepositoryFactory.createRepository(getActivity(), offLineFlag);
                 RoundRepository.BooleanCallback callback =
                         new RoundRepository.BooleanCallback() {
                             @Override
@@ -99,13 +100,20 @@ public class RoundListFragment extends Fragment {
                 callbacks.onPreferencesSelected();
                 return true;
 
+            case R.id.menu_item_close_session:
+                ConectPreferenceActivity.setPlayerName(getActivity(), ConectPreferenceActivity.PLAYERNAME_DEFAULT);
+                ConectPreferenceActivity.setPlayerPassword(getActivity(),ConectPreferenceActivity.PLAYERPASS_KEY);
+                ConectPreferenceActivity.setPlayerUUID(getActivity(), ConectPreferenceActivity.PLAYERID_DEFAULT);
+                callbacks.onCloseSession();
+
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
     public void updateUI() {
-        RoundRepository repository = RoundRepositoryFactory.createRepository(getActivity());
+        boolean offLineFlag = ConectPreferenceActivity.getGameMode(getActivity()).equals(ConectPreferenceActivity.GAMEMODE_DEFAULT);
+        RoundRepository repository = RoundRepositoryFactory.createRepository(getActivity(), offLineFlag);
         RoundRepository.RoundsCallback roundsCallback = new RoundRepository.RoundsCallback() {
             @Override
             public void onResponse(List<Round> rounds) {
@@ -131,6 +139,7 @@ public class RoundListFragment extends Fragment {
             void onRoundSelected(Round round);
             void onPreferencesSelected();
             void onNewRoundAdded(Round round);
+            void onCloseSession();
     }
 
     private void setCardListener(View view) {
@@ -141,7 +150,8 @@ public class RoundListFragment extends Fragment {
                 new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, final int position) {
-                        RoundRepository repository = RoundRepositoryFactory.createRepository(getActivity());
+                        boolean offLineFlag = ConectPreferenceActivity.getGameMode(getActivity()).equals(ConectPreferenceActivity.GAMEMODE_DEFAULT);
+                        RoundRepository repository = RoundRepositoryFactory.createRepository(getActivity(), offLineFlag);
                         RoundRepository.RoundsCallback roundsCallback = new RoundRepository.RoundsCallback()
                         {
                             @Override
@@ -170,22 +180,25 @@ public class RoundListFragment extends Fragment {
         public class RoundHolder extends RecyclerView.ViewHolder{
 
             private TextView idTextView;
-            private TextView boardTextView;
             private TextView dateTextView;
+            private TextView secondPlayerTextView;
+            private ConectView board;
             private Round round;
 
             public RoundHolder(View itemView) {
                 super(itemView);
                 idTextView = (TextView) itemView.findViewById(R.id.list_item_id);
-                boardTextView = (TextView) itemView.findViewById(R.id.list_item_board);
+                board = (ConectView) itemView.findViewById(R.id.list_item_board);
                 dateTextView = (TextView) itemView.findViewById(R.id.list_item_date);
+                secondPlayerTextView = (TextView) itemView.findViewById(R.id.list_item_second_player_name);
             }
 
             public void bindRound(Round round){
                 this.round = round;
                 idTextView.setText(round.getTitle());
-                boardTextView.setText(round.getBoard().toString());
+                board.setBoard(round.getSize(), round.getBoard());
                 dateTextView.setText(String.valueOf(round.getDate()).substring(0,19));
+                secondPlayerTextView.setText(round.getSecondPlayerName());
             }
         }
 

@@ -5,4 +5,5 @@
     <color name="colorAccent">#FF4081</color>
     <color name="background_color">#F0F0F0</color>
     <color name="loginBackgroundColor">@android:color/holo_blue_light</color>
+    <color name="boardBackgroundColor">#000000</color>
 </resources>

@@ -3,10 +3,12 @@ package eps.android4_jorgegomez.activities;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +22,7 @@ import eps.android4_jorgegomez.model.RoundRepositoryFactory;
 import eps.android4_jorgegomez.model.ConectBoard;
 import eps.android4_jorgegomez.view.ConectView;
 import es.uam.eps.multij.Evento;
+import es.uam.eps.multij.ExcepcionJuego;
 import es.uam.eps.multij.Partida;
 import es.uam.eps.multij.Tablero;
 import es.uam.eps.multij.PartidaListener;
@@ -31,12 +34,12 @@ import es.uam.eps.multij.JugadorAleatorio;
 public class RoundFragment extends Fragment implements PartidaListener{
 
     public static final String DEBUG = "DEBUG";
-    public static final String ARG_ROUND_ID = "es.uam.eps.dadm.er19.round_id";
-    public static final String ARG_FIRST_PLAYER_NAME = "es.uam.eps.dadm.er19.first_player_name";
-    public static final String ARG_ROUND_TITLE = "es.uam.eps.dadm.er19.round_title";
-    public static final String ARG_ROUND_SIZE = "es.uam.eps.dadm.er19.round_size";
-    public static final String ARG_ROUND_DATE = "es.uam.eps.dadm.er19.round_date";
-    public static final String ARG_ROUND_BOARD = "es.uam.eps.dadm.er19.round_board";
+    public static final String ARG_ROUND_ID = "eps.android4_jorgegomez.round_id";
+    public static final String ARG_FIRST_PLAYER_NAME = "eps.android4_jorgegomez.first_player_name";
+    public static final String ARG_ROUND_TITLE = "eps.android4_jorgegomez.round_title";
+    public static final String ARG_ROUND_SIZE = "eps.android4_jorgegomez.round_size";
+    public static final String ARG_ROUND_DATE = "eps.android4_jorgegomez.round_date";
+    public static final String ARG_ROUND_BOARD = "eps.android4_jorgegomez.round_board";
 
     private String BOARDSTRING;
 
@@ -46,6 +49,7 @@ public class RoundFragment extends Fragment implements PartidaListener{
     private ConectView boardView;
     private String roundId, firstPlayerName, roundTitle, roundDate, boardString;
     private Callbacks callbacks;
+    private Round round;
 
     public RoundFragment() { }
 
@@ -102,25 +106,33 @@ public class RoundFragment extends Fragment implements PartidaListener{
             boardString = getArguments().getString(ARG_ROUND_BOARD);
         }
         if (savedInstanceState != null)
-            boardString = savedInstanceState.getString(ARG_ROUND_BOARD);
+            boardString = savedInstanceState.getString(BOARDSTRING);
+
+        round = createRound();
     }
 
-    /*@Override
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_round, container, false);
         TextView roundTitleTextView = (TextView) rootView.findViewById(R.id.round_title);
         roundTitleTextView.setText(round.getTitle());
         return rootView;
-    }*/
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState){
+        outState.putString(BOARDSTRING, round.getBoard().tableroToString());
+        super.onSaveInstanceState(outState);
+    }
 
     @Override
     public void onStart(){
         super.onStart();
+        startRound();
         updateRound();
-        //startRound();
     }
 
-    /*void startRound() {
+    void startRound() {
         ArrayList<Jugador> players = new ArrayList<Jugador>();
         JugadorAleatorio randomPlayer = new JugadorAleatorio("Random player");
         JugadorLocal localPlayer = new JugadorLocal();
@@ -138,10 +150,10 @@ public class RoundFragment extends Fragment implements PartidaListener{
 
         if (game.getTablero().getEstado() == Tablero.EN_CURSO)
             game.comenzar();
-    }*/
+    }
 
 
-    /*private void registerListeners(JugadorLocal local) {
+    private void registerListeners(JugadorLocal local) {
         FloatingActionButton resetButton = getView().findViewById(R.id.reset_found_fab);
         resetButton.setOnClickListener(
                 new View.OnClickListener(){
@@ -157,7 +169,7 @@ public class RoundFragment extends Fragment implements PartidaListener{
                         Snackbar.make(getView(), R.string.round_restarted, Snackbar.LENGTH_SHORT).show();
                     }
                 });
-    }*/
+    }
 
     @Override
     public void onCambioEnPartida(Evento evento) {
@@ -165,30 +177,39 @@ public class RoundFragment extends Fragment implements PartidaListener{
             case Evento.EVENTO_CAMBIO:
                 boardView.invalidate();
                 callbacks.onRoundUpdated();
+                updateRound();
                 break;
             case Evento.EVENTO_FIN:
                 boardView.invalidate();
                 callbacks.onRoundUpdated();
                 new AlertDialogFragment().show(getActivity().getSupportFragmentManager(),"ALERT DIALOG");
+                updateRound();
                 break;
+
         }
     }
 
     private Round createRound() {
         Round round = new Round(roundSize);
-        round.setPlayerUUID(ConectPreferenceActivity.getPlayerUUID(getActivity()));
+        round.setFirstPlayerUUID(ConectPreferenceActivity.getPlayerUUID(getActivity()));
         round.setId(roundId);
         round.setFirstPlayerName("random");
         round.setSecondPlayerName(firstPlayerName);
         round.setDate(roundDate);
         round.setTitle(roundTitle);
-        round.setBoard(board);
+
+        try {
+            round.getBoard().stringToTablero(boardString);
+        }catch (ExcepcionJuego e){
+            Log.d("DEBUG", "No se pudo iniciar el tablero desde el string");
+        }
+
         return round;
     }
 
     private void updateRound() {
-        Round round = createRound();
-        RoundRepository repository = RoundRepositoryFactory.createRepository(getActivity());
+        boolean offLineFlag = ConectPreferenceActivity.getGameMode(getActivity()).equals(ConectPreferenceActivity.GAMEMODE_DEFAULT);
+        RoundRepository repository = RoundRepositoryFactory.createRepository(getActivity(), offLineFlag);
         RoundRepository.BooleanCallback callback = new RoundRepository.BooleanCallback() {
             @Override
             public void onResponse(boolean response) {

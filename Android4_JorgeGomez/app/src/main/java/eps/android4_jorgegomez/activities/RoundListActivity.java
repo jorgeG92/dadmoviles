@@ -32,15 +32,16 @@ public class RoundListActivity extends AppCompatActivity implements RoundListFra
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
-        //ActionBar ab = getSupportActionBar();
-        //ab.setDisplayHomeAsUpEnabled(true);
         PreferenceManager.setDefaultValues(this, R.xml.settings, false);
     }
 
     @Override
     public void onRoundSelected(Round round){
         if (findViewById(R.id.detail_fragment_container) == null) {
-            Intent intent = RoundActivity.newIntent(this, round.getId());
+            Intent intent = RoundActivity.newIntent(this, round.getId(),
+                    round.getFirstPlayerName(), round.getTitle(), round.getSize(), round.getDate(),
+                    round.getBoard().tableroToString());
+
             startActivity(intent);
         } else {
             RoundFragment roundFragment = RoundFragment.newInstance(round.getId(), round.getFirstPlayerName(),
@@ -55,8 +56,7 @@ public class RoundListActivity extends AppCompatActivity implements RoundListFra
 
     @Override
     public void onPreferencesSelected() {
-        Intent intent = new Intent(this, ConectPreferenceActivity.class);
-        startActivity(intent);
+        startActivity(new Intent(this, ConectPreferenceActivity.class));
     }
 
     @Override
@@ -71,6 +71,12 @@ public class RoundListActivity extends AppCompatActivity implements RoundListFra
                 fragmentManager.findFragmentById(R.id.fragment_container);
         roundListFragment.updateUI();
 
+    }
+
+    @Override
+    public void onCloseSession(){
+        startActivity(new Intent(this, LoginActivity.class));
+        finish();
     }
 
 }

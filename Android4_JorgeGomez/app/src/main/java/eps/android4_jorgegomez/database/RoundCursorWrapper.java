@@ -27,7 +27,7 @@ public class RoundCursorWrapper extends CursorWrapper{
         Round round = new Round(Integer.parseInt(size));
         round.setFirstPlayerName("random");
         round.setSecondPlayerName(playername);
-        round.setPlayerUUID(playeruuid);
+        round.setFirstPlayerUUID(playeruuid);
         round.setId(rounduuid);
         round.setDate(date);
         round.setTitle(title);

@@ -15,7 +15,7 @@ import es.uam.eps.multij.Tablero;
 
 public class ConectView extends View {
 
-    private final String DEBUG = "ERView";
+    private final String DEBUG = "ConectView";
     private int numero;
     private OnPlayListener onPlayListener;
     private Paint backgroundPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -100,13 +100,15 @@ public class ConectView extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (board.getEstado() != Tablero.EN_CURSO) {
-            Snackbar.make(findViewById(R.id.board_erview), R.string.round_already_finished,
-                    Snackbar.LENGTH_SHORT).show();
-            return super.onTouchEvent(event);
-        }
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            onPlayListener.onPlay(fromEventToI(event), fromEventToJ(event));
+        if (onPlayListener != null) {
+            if (board.getEstado() != Tablero.EN_CURSO) {
+                Snackbar.make(findViewById(R.id.board_erview), R.string.round_already_finished,
+                        Snackbar.LENGTH_SHORT).show();
+                return super.onTouchEvent(event);
+            }
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                onPlayListener.onPlay(fromEventToI(event), fromEventToJ(event));
+            }
         }
         return true;
     }

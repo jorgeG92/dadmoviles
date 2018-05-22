@@ -57,13 +57,19 @@ public class Round {
         this.board = board;
     }
 
-    public void setPlayerUUID(String uuid){ firstPlayerId = uuid; }
+    public void setFirstPlayerUUID(String uuid){ firstPlayerId = uuid; }
 
-    public String getPlayerUUID(){ return firstPlayerId; }
+    public String getFirstPlayerUUID(){ return firstPlayerId; }
+
+    public void setSecondPlayerUUID(String uuid){ secondPlayerId = uuid; }
+
+    public String getSecondPlayerUUID(){ return secondPlayerId; }
 
     public void setFirstPlayerName(String name){ firstPlayerName = name; }
 
     public String getFirstPlayerName() { return firstPlayerName; }
 
     public void setSecondPlayerName(String name){ secondPlayerName = name; }
+
+    public String getSecondPlayerName() { return secondPlayerName; }
 }

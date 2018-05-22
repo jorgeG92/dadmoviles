@@ -20,6 +20,10 @@
     <string name="level_array_4">Conecta 4</string>
     <string name="level_array_5">Conecta 5</string>
 
+    <string name="close_session">Cerrar sesión</string>
+
+    <string name="game_online">Login: On-Line</string>
+    <string name="game_offline">Login: Off-Line</string>
 
     <string name="login_first_text_view_text">Login</string>
     <string name="login_first_edit_text_hint">Nombre de usuario</string>
@@ -30,8 +34,9 @@
     <string name="login_alert_dialog_title">Error</string>
     <string name="login_alert_dialog_message">Login fallido</string>
     <string name="login_alert_dialog_neutral_button_text">Inténtelo de nuevo</string>
-    <string name="error_reading_rounds">Error while reading rounds</string>
-    <string name="error_adding_round">"Error while adding round"</string>
-    <string name="error_updating_round">Error while updating round</string>
-    <string name="repository_opening_error">An error ocurred while opening repository</string>
+    <string name="login_switch_game">Cambiar modo</string>
+    <string name="error_reading_rounds">Error al leer las rondas</string>
+    <string name="error_adding_round">"Error al añadir ronda"</string>
+    <string name="error_updating_round">Error al actualizar ronda</string>
+    <string name="repository_opening_error">Error al abrir repositorio</string>
 </resources>
