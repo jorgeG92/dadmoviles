@@ -153,6 +153,11 @@ public class ConectDataBase implements RoundRepository {
             callback.onResponse(id >= 0);
     }
 
+    @Override
+    public void setPlayerNameSettings(String playername, String playerid) {
+        //No es necesaria
+    }
+
     private RoundCursorWrapper queryRounds() {
         String sql = "SELECT " + UserTable.Cols.PLAYERNAME + ", " +
                 UserTable.Cols.PLAYERUUID + ", " +

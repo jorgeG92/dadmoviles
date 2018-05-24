@@ -10,6 +10,9 @@ import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.Toolbar;
 
 import eps.android4_jorgegomez.R;
+import eps.android4_jorgegomez.firedatabase.FBDataBase;
+import eps.android4_jorgegomez.model.RoundRepository;
+import eps.android4_jorgegomez.model.RoundRepositoryFactory;
 
 public class ConectPreferenceActivity extends AppCompatActivity {
 
@@ -58,6 +61,11 @@ public class ConectPreferenceActivity extends AppCompatActivity {
 
         editor.putString(ConectPreferenceActivity.PLAYERNAME_KEY, pass);
         editor.commit();
+
+        //Actualizacion en Firebase
+        RoundRepository repository = RoundRepositoryFactory.createRepository(context, ConectPreferenceActivity.getGameMode(context).equals(ConectPreferenceActivity.GAMEMODE_DEFAULT));
+        if (repository instanceof FBDataBase)
+            repository.setPlayerNameSettings(pass, ConectPreferenceActivity.getPlayerUUID(context));
     }
 
     public static String getPlayerName(Context context){

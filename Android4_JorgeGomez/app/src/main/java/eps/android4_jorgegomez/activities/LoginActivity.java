@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import eps.android4_jorgegomez.R;
+import eps.android4_jorgegomez.firedatabase.FBDataBase;
 import eps.android4_jorgegomez.model.RoundRepository;
 import eps.android4_jorgegomez.model.RoundRepositoryFactory;
 
@@ -25,6 +25,10 @@ public class LoginActivity extends Activity implements View.OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        /*ConectPreferenceActivity.setGameMode(this, ConectPreferenceActivity.GAMEMODE_DEFAULT);
+        if (isOnline())
+            ConectPreferenceActivity.setGameMode(this, "On-Line");*/
 
         if (!ConectPreferenceActivity.getPlayerName(this).equals(ConectPreferenceActivity.PLAYERNAME_DEFAULT)){
             startActivity(new Intent(LoginActivity.this, RoundListActivity.class));
@@ -49,11 +53,11 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 
         TextView textLogin = findViewById(R.id.login_text);
 
-        if(!ConectPreferenceActivity.getGameMode(this).equals(ConectPreferenceActivity.GAMEMODE_DEFAULT)){
-            textLogin.setText(R.string.game_online);
-        }else{
+        if(ConectPreferenceActivity.getGameMode(this).equals(ConectPreferenceActivity.GAMEMODE_DEFAULT))
             textLogin.setText(R.string.game_offline);
-        }
+        else
+            textLogin.setText(R.string.game_online);
+
 
         repository = RoundRepositoryFactory.createRepository(LoginActivity.this,
                 ConectPreferenceActivity.getGameMode(this).equals(ConectPreferenceActivity.GAMEMODE_DEFAULT));
@@ -62,6 +66,12 @@ public class LoginActivity extends Activity implements View.OnClickListener {
             Toast.makeText(LoginActivity.this, R.string.repository_opening_error,
                     Toast.LENGTH_SHORT).show();
     }
+
+    /*public boolean isOnline(){
+        ConnectivityManager connMgr = (ConnectivityManager) getSystemService (Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        return (networkInfo != null && networkInfo.isConnected());
+    }*/
 
     public void onClick(View v) {
         final String playername = usernameEditText.getText().toString();
@@ -75,6 +85,9 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                         ConectPreferenceActivity.setPlayerUUID(LoginActivity.this, playerId);
                         ConectPreferenceActivity.setPlayerName(LoginActivity.this, playername);
                         ConectPreferenceActivity.setPlayerPassword(LoginActivity.this, password);
+                        if (repository instanceof FBDataBase)
+                            repository.setPlayerNameSettings(playername, playerId);
+
                         startActivity(new Intent(LoginActivity.this, RoundListActivity.class));
                         finish();
                     }
@@ -96,20 +109,24 @@ public class LoginActivity extends Activity implements View.OnClickListener {
             case R.id.login_button:
                 repository.login(playername, password, loginRegisterCallback);
                 //Una vez logeados modificamos el valor del nombre de preferencias
-                ConectPreferenceActivity.setPlayerName(this, playername);
+
                 break;
             case R.id.cancel_button:
                 finish();
                 break;
+
             case R.id.new_user_button:
                 repository.register(playername, password, loginRegisterCallback);
+                ConectPreferenceActivity.setPlayerName(this, playername);
+                if (repository instanceof FBDataBase)
+                    repository.setPlayerNameSettings(playername, ConectPreferenceActivity.getPlayerUUID(this));
                 break;
+
             case R.id.switch_game:
                 if (ConectPreferenceActivity.getGameMode(this).equals(ConectPreferenceActivity.GAMEMODE_DEFAULT))
                     ConectPreferenceActivity.setGameMode(this, "On-Line");
                 else
                     ConectPreferenceActivity.setGameMode(this, ConectPreferenceActivity.GAMEMODE_DEFAULT);
-
                 startActivity(new Intent(LoginActivity.this, LoginActivity.class));
                 finish();
 

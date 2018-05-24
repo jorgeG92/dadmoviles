@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.Random;
 
 import eps.android4_jorgegomez.R;
 import eps.android4_jorgegomez.model.Round;
@@ -74,11 +75,18 @@ public class RoundListFragment extends Fragment {
             case R.id.menu_item_new_round:
                 int size = Integer.parseInt(ConectPreferenceActivity.getBoardSize(getActivity()));
                 final Round round = new Round(size);
-                round.setFirstPlayerUUID(ConectPreferenceActivity.getPlayerUUID(getActivity()));
-                round.setFirstPlayerName(ConectPreferenceActivity.getPlayerName(getActivity()));
-                //Podriamos dar a elegir el jugador con el que jugar
-                round.setSecondPlayerName("ElRandom");
-                round.setSecondPlayerUUID("000000001000000000");
+
+                if (new Random().nextBoolean()) {
+                    round.setFirstPlayerUUID(ConectPreferenceActivity.getPlayerUUID(getActivity()));
+                    round.setFirstPlayerName(ConectPreferenceActivity.getPlayerName(getActivity()));
+                    round.setSecondPlayerName("El_Random");
+                    round.setSecondPlayerUUID("0000-0000-0000");
+                }else{
+                    round.setFirstPlayerUUID("0000-0000-0000");
+                    round.setFirstPlayerName("El_Random");
+                    round.setSecondPlayerName(ConectPreferenceActivity.getPlayerName(getActivity()));
+                    round.setSecondPlayerUUID(ConectPreferenceActivity.getPlayerUUID(getActivity()));
+                }
                 boolean offLineFlag = ConectPreferenceActivity.getGameMode(getActivity()).equals(ConectPreferenceActivity.GAMEMODE_DEFAULT);
                 RoundRepository repository =
                         RoundRepositoryFactory.createRepository(getActivity(), offLineFlag);
@@ -132,7 +140,7 @@ public class RoundListFragment extends Fragment {
             }
         };
         String playeruuid = ConectPreferenceActivity.getPlayerUUID(getActivity());
-        repository.getRounds(playeruuid, null, null, roundsCallback);
+        roundsCallback.onResponse(repository.getRounds(playeruuid, null, null, roundsCallback));
     }
 
     public interface Callbacks {
@@ -143,8 +151,7 @@ public class RoundListFragment extends Fragment {
     }
 
     private void setCardListener(View view) {
-        roundRecyclerView =
-                (RecyclerView)view.findViewById(R.id.round_recycler_view);
+        roundRecyclerView = (RecyclerView)view.findViewById(R.id.round_recycler_view);
 
         RecyclerItemClickListener.OnItemClickListener onItemClickListener =
                 new RecyclerItemClickListener.OnItemClickListener() {
@@ -183,7 +190,6 @@ public class RoundListFragment extends Fragment {
             private TextView dateTextView;
             private TextView secondPlayerTextView;
             private ConectView board;
-            private Round round;
 
             public RoundHolder(View itemView) {
                 super(itemView);
@@ -194,11 +200,14 @@ public class RoundListFragment extends Fragment {
             }
 
             public void bindRound(Round round){
-                this.round = round;
                 idTextView.setText(round.getTitle());
                 board.setBoard(round.getSize(), round.getBoard());
                 dateTextView.setText(String.valueOf(round.getDate()).substring(0,19));
-                secondPlayerTextView.setText(round.getSecondPlayerName());
+                String id =  ConectPreferenceActivity.getPlayerUUID(getActivity());
+                if (id.equals(round.getFirstPlayerUUID()))
+                    secondPlayerTextView.setText(round.getSecondPlayerName());
+                else
+                    secondPlayerTextView.setText(round.getFirstPlayerName());
             }
         }
 

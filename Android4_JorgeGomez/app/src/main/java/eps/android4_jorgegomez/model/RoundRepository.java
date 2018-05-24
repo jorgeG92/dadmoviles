@@ -32,4 +32,6 @@ public interface RoundRepository {
         void onResponse(List<Round> rounds);
         void onError(String error);
     }
+
+    public void setPlayerNameSettings(final String playername, final String playerid);
 }

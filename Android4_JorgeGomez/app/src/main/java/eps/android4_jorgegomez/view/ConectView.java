@@ -107,7 +107,7 @@ public class ConectView extends View {
                 return super.onTouchEvent(event);
             }
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                onPlayListener.onPlay(fromEventToI(event), fromEventToJ(event));
+                onPlayListener.onPlay(fromEventToI(event), fromEventToJ(event), findViewById(R.id.board_erview));
             }
         }
         return true;
@@ -123,7 +123,7 @@ public class ConectView extends View {
     }
 
     public interface OnPlayListener {
-        void onPlay(int row, int column);
+        void onPlay(int row, int column, View view);
     }
 
     public void setOnPlayListener(OnPlayListener listener) {

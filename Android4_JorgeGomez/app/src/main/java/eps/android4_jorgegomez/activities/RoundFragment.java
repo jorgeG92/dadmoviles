@@ -1,6 +1,7 @@
 package eps.android4_jorgegomez.activities;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -36,20 +37,25 @@ public class RoundFragment extends Fragment implements PartidaListener{
     public static final String DEBUG = "DEBUG";
     public static final String ARG_ROUND_ID = "eps.android4_jorgegomez.round_id";
     public static final String ARG_FIRST_PLAYER_NAME = "eps.android4_jorgegomez.first_player_name";
+    public static final String ARG_SECOND_PLAYER_NAME = "eps.android4_jorgegomez.second_player_name";
+    public static final String ARG_FIRST_PLAYER_ID = "eps.android4_jorgegomez.first_player_id";
+    public static final String ARG_SECOND_PLAYER_ID = "eps.android4_jorgegomez.second_player_id";
     public static final String ARG_ROUND_TITLE = "eps.android4_jorgegomez.round_title";
     public static final String ARG_ROUND_SIZE = "eps.android4_jorgegomez.round_size";
     public static final String ARG_ROUND_DATE = "eps.android4_jorgegomez.round_date";
     public static final String ARG_ROUND_BOARD = "eps.android4_jorgegomez.round_board";
+    public static final String ARG_ROUND_OFFLINE = "eps.android4_jorgegomez.online_game";
 
     private String BOARDSTRING;
 
     private int roundSize;
-    private ConectBoard board;
     private Partida game;
     private ConectView boardView;
-    private String roundId, firstPlayerName, roundTitle, roundDate, boardString;
+    private String roundId, firstPlayerName, secondPlayerName, firstPlayerId, secondPlayerId, roundTitle, roundDate, boardString;
     private Callbacks callbacks;
     private Round round;
+    private boolean roundOffline;
+    int i =0;
 
     public RoundFragment() { }
 
@@ -69,15 +75,20 @@ public class RoundFragment extends Fragment implements PartidaListener{
         callbacks = null;
     }
 
-    public static RoundFragment newInstance(String roundId, String firstPlayerName,
-                            String roundTitle, int roundSize, String roundDate, String roundBoard) {
+    public static RoundFragment newInstance(String roundId, String firstPlayerName, String secondPlayerName,
+                            String firstPlayerId, String secondPlayerId, String roundTitle, int roundSize,
+                            String roundDate, String roundBoard, boolean offline) {
         Bundle args = new Bundle();
         args.putString(ARG_ROUND_ID, roundId);
         args.putString(ARG_FIRST_PLAYER_NAME, firstPlayerName);
+        args.putString(ARG_SECOND_PLAYER_NAME, secondPlayerName);
+        args.putString(ARG_FIRST_PLAYER_ID, firstPlayerId);
+        args.putString(ARG_SECOND_PLAYER_ID, secondPlayerId);
         args.putString(ARG_ROUND_TITLE, roundTitle);
         args.putInt(ARG_ROUND_SIZE, roundSize);
         args.putString(ARG_ROUND_DATE, roundDate);
         args.putString(ARG_ROUND_BOARD, roundBoard);
+        args.putBoolean(ARG_ROUND_OFFLINE, offline);
         RoundFragment roundFragment = new RoundFragment();
         roundFragment.setArguments(args);
         return roundFragment;
@@ -87,24 +98,36 @@ public class RoundFragment extends Fragment implements PartidaListener{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getArguments().containsKey(ARG_ROUND_ID)) {
+        if (getArguments().containsKey(ARG_ROUND_ID))
             roundId = getArguments().getString(ARG_ROUND_ID);
-        }
-        if (getArguments().containsKey(ARG_FIRST_PLAYER_NAME)) {
+
+        if (getArguments().containsKey(ARG_FIRST_PLAYER_NAME))
             firstPlayerName = getArguments().getString(ARG_FIRST_PLAYER_NAME);
-        }
-        if (getArguments().containsKey(ARG_ROUND_TITLE)) {
+
+        if (getArguments().containsKey(ARG_SECOND_PLAYER_NAME))
+            secondPlayerName = getArguments().getString(ARG_SECOND_PLAYER_NAME);
+
+        if (getArguments().containsKey(ARG_FIRST_PLAYER_ID))
+            firstPlayerId = getArguments().getString(ARG_FIRST_PLAYER_ID);
+
+        if (getArguments().containsKey(ARG_SECOND_PLAYER_ID))
+            secondPlayerId = getArguments().getString(ARG_SECOND_PLAYER_ID);
+
+        if (getArguments().containsKey(ARG_ROUND_TITLE))
             roundTitle = getArguments().getString(ARG_ROUND_TITLE);
-        }
-        if (getArguments().containsKey(ARG_ROUND_SIZE)) {
+
+        if (getArguments().containsKey(ARG_ROUND_SIZE))
             roundSize = getArguments().getInt(ARG_ROUND_SIZE);
-        }
-        if (getArguments().containsKey(ARG_ROUND_DATE)) {
+
+        if (getArguments().containsKey(ARG_ROUND_DATE))
             roundDate = getArguments().getString(ARG_ROUND_DATE);
-        }
-        if (getArguments().containsKey(ARG_ROUND_BOARD)) {
+
+        if (getArguments().containsKey(ARG_ROUND_OFFLINE))
+            roundOffline = getArguments().getBoolean(ARG_ROUND_OFFLINE);
+
+        if (getArguments().containsKey(ARG_ROUND_BOARD))
             boardString = getArguments().getString(ARG_ROUND_BOARD);
-        }
+
         if (savedInstanceState != null)
             boardString = savedInstanceState.getString(BOARDSTRING);
 
@@ -133,16 +156,40 @@ public class RoundFragment extends Fragment implements PartidaListener{
     }
 
     void startRound() {
-        ArrayList<Jugador> players = new ArrayList<Jugador>();
-        JugadorAleatorio randomPlayer = new JugadorAleatorio("Random player");
-        JugadorLocal localPlayer = new JugadorLocal();
-        players.add(randomPlayer);
-        players.add(localPlayer);
+        ArrayList<Jugador> players = new ArrayList<>();
+        JugadorLocal localPlayer;
+        Jugador player2;
+
+        boolean primer_turno = ConectPreferenceActivity.getPlayerUUID(getActivity()).equals(firstPlayerId);
+
+
+        if (primer_turno)
+            localPlayer = new JugadorLocal(firstPlayerId);
+        else
+            localPlayer = new JugadorLocal(secondPlayerId);
+
+        if(roundOffline)
+            player2 = new JugadorAleatorio("0000-0000-0000");
+        else
+            if (primer_turno)
+                player2 = new JugadorRemoto(secondPlayerId);
+            else
+                player2 = new JugadorRemoto(firstPlayerId);
+
+        if (primer_turno) {
+            players.add(localPlayer);
+            players.add(player2);
+        }else {
+            players.add(player2);
+            players.add(localPlayer);
+
+        }
 
         game = new Partida(round.getBoard(), players);
         game.addObservador(this);
 
         localPlayer.setPartida(game);
+
         boardView = (ConectView) getView().findViewById(R.id.board_erview);
         boardView.setBoard(roundSize, round.getBoard());
         boardView.setOnPlayListener(localPlayer);
@@ -161,12 +208,13 @@ public class RoundFragment extends Fragment implements PartidaListener{
                     public void onClick(View v) {
                         if (round.getBoard().getEstado() != Tablero.EN_CURSO){
                             Snackbar.make(getView(), R.string.round_already_finished, Snackbar.LENGTH_SHORT).show();
+                        }else{
+                            round.getBoard().reset();
+                            startRound();
+                            callbacks.onRoundUpdated();
+                            boardView.invalidate();
+                            Snackbar.make(getView(), R.string.round_restarted, Snackbar.LENGTH_SHORT).show();
                         }
-                        round.getBoard().reset();
-                        startRound();
-                        callbacks.onRoundUpdated();
-                        boardView.invalidate();
-                        Snackbar.make(getView(), R.string.round_restarted, Snackbar.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -179,6 +227,7 @@ public class RoundFragment extends Fragment implements PartidaListener{
                 callbacks.onRoundUpdated();
                 updateRound();
                 break;
+
             case Evento.EVENTO_FIN:
                 boardView.invalidate();
                 callbacks.onRoundUpdated();
@@ -186,6 +235,12 @@ public class RoundFragment extends Fragment implements PartidaListener{
                 updateRound();
                 break;
 
+            case Evento.EVENTO_CONFIRMA:
+                break;
+            case Evento.EVENTO_ERROR:
+                break;
+            case Evento.EVENTO_TURNO:
+                break;
         }
     }
 
@@ -193,8 +248,10 @@ public class RoundFragment extends Fragment implements PartidaListener{
         Round round = new Round(roundSize);
         round.setFirstPlayerUUID(ConectPreferenceActivity.getPlayerUUID(getActivity()));
         round.setId(roundId);
-        round.setFirstPlayerName("random");
-        round.setSecondPlayerName(firstPlayerName);
+        round.setFirstPlayerName(firstPlayerName);
+        round.setSecondPlayerName(secondPlayerName);
+        round.setFirstPlayerUUID(firstPlayerId);
+        round.setSecondPlayerUUID(secondPlayerId);
         round.setDate(roundDate);
         round.setTitle(roundTitle);
 

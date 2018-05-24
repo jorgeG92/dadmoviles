@@ -44,14 +44,11 @@ import es.uam.eps.multij.Tablero;
  */
 public class ConectBoard extends Tablero {
 
-    /** Array que contiene el tablero*/
-    private int[][] tablero;
-    /** Entero que contiene el numero de columanas y de filas del juego*/
-    private int tamanioFilas;
-    /** Entero que contiene el numero de columanas y de filas del juego*/
-    private int tamanioColumnas;
-    /** Entero que indica el numero de fichas seguidas para ganar*/
-    private int maxFichas;
+
+    private int[][] tablero;        /** Array que contiene el tablero*/
+    private int tamanioFilas;       /** Entero que contiene el numero de columanas y de filas del juego*/
+    private int tamanioColumnas;    /** Entero que contiene el numero de columanas y de filas del juego*/
+    private int maxFichas;          /** Entero que indica el numero de fichas seguidas para ganar*/
     public static final int JUGADOR1=0;
     public static final int JUGADOR2=1;
     public static final int VACIO=-1;
@@ -295,7 +292,6 @@ public class ConectBoard extends Tablero {
             if(f>tamanioFilas-1 || (tablero[f][columna]!=turno)) break;
             else contadorFichas += 1;
         }
-        Log.d("DEBUG", "\n" + "Numero del contador M (F:" + String.valueOf(fila) + ", C:" + String.valueOf(columna) + "): " + String.valueOf(contadorFichas)+"\n\n" + this.toString());
         return contadorFichas;
     }
 
