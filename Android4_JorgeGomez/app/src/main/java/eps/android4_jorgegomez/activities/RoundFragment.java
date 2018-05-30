@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -61,6 +62,7 @@ public class RoundFragment extends Fragment implements PartidaListener{
 
     public interface Callbacks {
         void onRoundUpdated();
+        void onRoundDeleted();
     }
 
     @Override
@@ -158,31 +160,30 @@ public class RoundFragment extends Fragment implements PartidaListener{
     void startRound() {
         ArrayList<Jugador> players = new ArrayList<>();
         JugadorLocal localPlayer;
-        Jugador player2;
+        Jugador remotePlayer;
 
         boolean primer_turno = ConectPreferenceActivity.getPlayerUUID(getActivity()).equals(firstPlayerId);
 
-
-        if (primer_turno)
+        //Generacion de usuarios
+        if (primer_turno) {
             localPlayer = new JugadorLocal(firstPlayerId);
-        else
+            remotePlayer = new JugadorRemoto(secondPlayerId);
+        }
+        else{
             localPlayer = new JugadorLocal(secondPlayerId);
+            remotePlayer = new JugadorRemoto(firstPlayerId);
+        }
 
         if(roundOffline)
-            player2 = new JugadorAleatorio("0000-0000-0000");
-        else
-            if (primer_turno)
-                player2 = new JugadorRemoto(secondPlayerId);
-            else
-                player2 = new JugadorRemoto(firstPlayerId);
+            remotePlayer = new JugadorAleatorio("0000-0000-0000");
+
 
         if (primer_turno) {
             players.add(localPlayer);
-            players.add(player2);
+            players.add(remotePlayer);
         }else {
-            players.add(player2);
+            players.add(remotePlayer);
             players.add(localPlayer);
-
         }
 
         game = new Partida(round.getBoard(), players);
@@ -202,6 +203,8 @@ public class RoundFragment extends Fragment implements PartidaListener{
 
     private void registerListeners(JugadorLocal local) {
         FloatingActionButton resetButton = getView().findViewById(R.id.reset_found_fab);
+        FloatingActionButton deleteRound = getView().findViewById(R.id.delete_found_fab);
+
         resetButton.setOnClickListener(
                 new View.OnClickListener(){
                     @Override
@@ -215,6 +218,30 @@ public class RoundFragment extends Fragment implements PartidaListener{
                             boardView.invalidate();
                             Snackbar.make(getView(), R.string.round_restarted, Snackbar.LENGTH_SHORT).show();
                         }
+                    }
+                });
+
+        deleteRound.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //Borrar
+                        RoundRepository repository = RoundRepositoryFactory.createRepository(
+                                getActivity(),
+                                ConectPreferenceActivity.getGameMode(getActivity()).equals(ConectPreferenceActivity.GAMEMODE_DEFAULT));
+
+                        RoundRepository.BooleanCallback booleanCallback = new RoundRepository.BooleanCallback() {
+                            @Override
+                            public void onResponse(boolean ok) {
+                                if (ok)
+                                    callbacks.onRoundDeleted();
+                                else
+                                    Snackbar.make(getView(), R.string.error_deleting_round,
+                                            Snackbar.LENGTH_LONG).show();
+                            }
+                        };
+                        //Llamar a RoundListFrafment
+                        repository.deleteRound(round, booleanCallback);
                     }
                 });
     }

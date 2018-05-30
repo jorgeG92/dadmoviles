@@ -25,6 +25,10 @@ public class ConectPreferenceActivity extends AppCompatActivity {
     public final static String PLAYERID_DEFAULT = "0000";
     public final static String GAMEMODE_KEY = "gamemode";
     public final static String GAMEMODE_DEFAULT = "Off-Line";
+    public final static String RAMDOMMODE_KEY = "randomPlayer";
+    public final static boolean RANDOMMODE_DEFAULT = true;
+    public final static String LOGGED_KEY = "logged";
+    public final static boolean LOGGED_DEFAULT = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +96,18 @@ public class ConectPreferenceActivity extends AppCompatActivity {
         editor.commit();
     }
 
+    public static boolean getRandomMode(Context context){
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(RAMDOMMODE_KEY, RANDOMMODE_DEFAULT);
+    }
+
+    public static void setRamdomMode(Context context, boolean value){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putBoolean(ConectPreferenceActivity.RAMDOMMODE_KEY, value);
+        editor.commit();
+    }
+
     public static String getGameMode(Context context){
         return PreferenceManager.getDefaultSharedPreferences(context).getString(GAMEMODE_KEY, GAMEMODE_DEFAULT);
     }
@@ -102,6 +118,24 @@ public class ConectPreferenceActivity extends AppCompatActivity {
 
         editor.putString(ConectPreferenceActivity.GAMEMODE_KEY, mode);
         editor.commit();
+    }
+
+    public static boolean getLogged(Context context){
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(LOGGED_KEY, LOGGED_DEFAULT);
+    }
+
+    public static void setLogged(Context context, boolean mode){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putBoolean(ConectPreferenceActivity.LOGGED_KEY, mode);
+        editor.commit();
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        setPlayerName(this, getPlayerName(this));
     }
 
 }

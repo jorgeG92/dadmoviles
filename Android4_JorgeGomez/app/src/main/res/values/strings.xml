@@ -12,8 +12,12 @@
     <string name="list_preference_title">Tamaño del tablero</string>
     <string name="checkbox_preference_summary">Pulsa si quieres escuchar musica</string>
     <string name="checkbox_preference_title">Musica</string>
+    <string name="checkbox_randomPlayer_summary">Marcar para la asinacion aleatoria de usuarios al generar una ronda nueva</string>
+    <string name="checkbox_randomPlayer_title">Jugaderes Aleatorios (Online)</string>
     <string name="playername_summary">Establece el nombre de usuario</string>
     <string name="playername_title">Nombre del jugador</string>
+    <string name="logged_sign_summary">Indica si estas registrado en la aplicacion</string>
+    <string name="logged_sing_title">Registrado"</string>
 
     <string name="settings">Configuracion</string>
     <string name="level_array_3">3 en raya</string>
@@ -38,5 +42,7 @@
     <string name="error_reading_rounds">Error al leer las rondas</string>
     <string name="error_adding_round">"Error al añadir ronda"</string>
     <string name="error_updating_round">Error al actualizar ronda</string>
+    <string name="error_deleting_round">Error al borrar ronda</string>
     <string name="repository_opening_error">Error al abrir repositorio</string>
+    <string name="select_player_title">Selecciona adversario</string>
 </resources>

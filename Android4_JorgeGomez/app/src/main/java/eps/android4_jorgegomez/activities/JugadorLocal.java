@@ -15,15 +15,13 @@ import es.uam.eps.multij.Tablero;
 public class JugadorLocal implements ConectView.OnPlayListener, Jugador {
     private String nombre;
     private int turno;
-    Partida game;
-
-    public JugadorLocal() { nombre = "Local Player"; }
+    private Partida game;
 
     public JugadorLocal(String nombre) {this.nombre = nombre;}
 
     public void setPartida(Partida game) {
         this.game = game;
-        if (game.getJugador(0).getNombre().equals(nombre)) //eSTAMOS SUPONIENDO QUE EL TURNO DEPENDE DE LA POSICION DE LOS NOMBRES
+        if (game.getJugador(0).getNombre().equals(nombre))
             turno = 0;
         else
             turno = 1;
@@ -43,7 +41,7 @@ public class JugadorLocal implements ConectView.OnPlayListener, Jugador {
     public void onCambioEnPartida(Evento evento) {
     }
 
-
+    @Override
     public void onPlay(int row, int column, View view) {
         try {
             if (game.getTablero().getEstado() != Tablero.EN_CURSO) {
@@ -51,10 +49,9 @@ public class JugadorLocal implements ConectView.OnPlayListener, Jugador {
             }
 
             if (game.getTablero().getTurno() == turno) {
-                ConectMovement m;
-                m = new ConectMovement(row, column);
-                if (game.getTablero().esValido(m))
-                    game.realizaAccion(new AccionMover(this, m));
+                ConectMovement mov = new ConectMovement(row, column);
+                if (game.getTablero().esValido(mov))
+                    game.realizaAccion(new AccionMover(this, mov));
 
             }else{
                 Snackbar.make(view, "Este turno no te corresponde", Snackbar.LENGTH_SHORT).show();

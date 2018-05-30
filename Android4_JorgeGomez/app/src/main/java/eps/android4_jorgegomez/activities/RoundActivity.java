@@ -77,4 +77,9 @@ public class RoundActivity extends AppCompatActivity implements RoundFragment.Ca
 
     @Override
     public void onRoundUpdated() { }
+
+    @Override
+    public void onRoundDeleted(){
+        startActivity(new Intent( RoundActivity.this, RoundListActivity.class));
+    }
 }

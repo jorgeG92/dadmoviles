@@ -11,6 +11,8 @@ import android.support.v7.widget.Toolbar;
 
 import eps.android4_jorgegomez.R;
 import eps.android4_jorgegomez.model.Round;
+import eps.android4_jorgegomez.model.RoundRepository;
+import eps.android4_jorgegomez.model.RoundRepositoryFactory;
 
 
 public class RoundListActivity extends AppCompatActivity implements RoundListFragment.Callbacks, RoundFragment.Callbacks{
@@ -62,8 +64,21 @@ public class RoundListActivity extends AppCompatActivity implements RoundListFra
     }
 
     @Override
-    public void onNewRoundAdded(Round round) {
+    public void onNewRoundAdded(Round round) { }
 
+    @Override
+    public void onNewRoundAdded(Round round, String userId, String userName) {
+        RoundRepository repository = RoundRepositoryFactory.createRepository(this,ConectPreferenceActivity.getGameMode(this).equals(ConectPreferenceActivity.GAMEMODE_DEFAULT));
+        round.setSecondPlayerUUID(userId);
+        round.setSecondPlayerName(userName);
+        RoundRepository.BooleanCallback booleanCallback = new RoundRepository.BooleanCallback() {
+            @Override
+            public void onResponse(boolean ok) {
+                onRoundUpdated();
+
+            }
+        };
+        repository.addRound(round, booleanCallback, false);
     }
 
     @Override
@@ -72,7 +87,6 @@ public class RoundListActivity extends AppCompatActivity implements RoundListFra
         RoundListFragment roundListFragment = (RoundListFragment)
                 fragmentManager.findFragmentById(R.id.fragment_container);
         roundListFragment.updateUI();
-
     }
 
     @Override
@@ -81,4 +95,15 @@ public class RoundListActivity extends AppCompatActivity implements RoundListFra
         finish();
     }
 
+    @Override
+    public void onRoundDeleted(){
+        onRoundUpdated();
+    }
+
+    @Override
+    public void onRestart(){
+        super.onRestart();
+        onRoundUpdated();
+
+    }
 }

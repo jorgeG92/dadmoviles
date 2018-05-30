@@ -6,4 +6,7 @@
     <color name="background_color">#F0F0F0</color>
     <color name="loginBackgroundColor">@android:color/holo_blue_light</color>
     <color name="boardBackgroundColor">#000000</color>
+    <color name="floatingBackground">@android:color/darker_gray</color>
+    <color name="floatingRestart">@android:color/holo_green_light</color>
+    <color name="floatingDelete">@android:color/holo_red_light</color>
 </resources>

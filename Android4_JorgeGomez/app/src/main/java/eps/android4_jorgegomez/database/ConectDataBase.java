@@ -10,8 +10,10 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
+import eps.android4_jorgegomez.activities.AlertDialogSelectPlayerFragment;
 import eps.android4_jorgegomez.model.Round;
 import eps.android4_jorgegomez.model.RoundRepository;
 import eps.android4_jorgegomez.database.RoundDataBaseSchema.UserTable;
@@ -143,6 +145,18 @@ public class ConectDataBase implements RoundRepository {
     }
 
     @Override
+    public void addRound(Round round, BooleanCallback callback, boolean randomFlag){
+
+    }
+
+    @Override
+    public void deleteRound(Round round, BooleanCallback callback) {
+        String values[] = {RoundTable.Cols.ROUNDUUID+"="+round.getId()};
+        db.delete(RoundTable.NAME,null, values);
+        callback.onResponse(true);
+    }
+
+    @Override
     public void updateRound(Round round, BooleanCallback callback) {
 
         ContentValues values = getContentValues(round);
@@ -156,6 +170,11 @@ public class ConectDataBase implements RoundRepository {
     @Override
     public void setPlayerNameSettings(String playername, String playerid) {
         //No es necesaria
+    }
+
+    @Override
+    public Map<String, String> getUsers(UsersCallback callback) {
+        return null;
     }
 
     private RoundCursorWrapper queryRounds() {
@@ -199,6 +218,4 @@ public class ConectDataBase implements RoundRepository {
 
         return rounds;
     }
-
-
 }

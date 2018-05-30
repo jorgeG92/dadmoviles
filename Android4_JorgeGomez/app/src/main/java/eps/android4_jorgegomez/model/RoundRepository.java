@@ -1,6 +1,9 @@
 package eps.android4_jorgegomez.model;
 
 import java.util.List;
+import java.util.Map;
+
+import eps.android4_jorgegomez.activities.AlertDialogSelectPlayerFragment;
 
 public interface RoundRepository {
 
@@ -24,7 +27,13 @@ public interface RoundRepository {
     List<Round> getRounds(String playeruuid, String orderByField, String group,
                    RoundsCallback callback);
 
+    Map<String, String> getUsers(UsersCallback callback);
+
+    void addRound(Round round, BooleanCallback callback, boolean randomFlag);
+
     void addRound(Round round, BooleanCallback callback);
+
+    void deleteRound(Round round, BooleanCallback callback);
 
     void updateRound(Round round, BooleanCallback callback);
 
@@ -33,5 +42,11 @@ public interface RoundRepository {
         void onError(String error);
     }
 
-    public void setPlayerNameSettings(final String playername, final String playerid);
+    interface UsersCallback {
+        void onResponse(Map<String, String> usersIdName);
+        void onError(String error);
+    }
+
+    void setPlayerNameSettings(final String playername, final String playerid);
+
 }

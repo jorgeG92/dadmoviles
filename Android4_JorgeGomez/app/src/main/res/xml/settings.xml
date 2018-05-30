@@ -8,15 +8,24 @@
             android:key="boardsize"
             android:summary="@string/list_preference_summary"
             android:title="@string/list_preference_title"/>
+
         <CheckBoxPreference
-            android:key="music"
-            android:summary="@string/checkbox_preference_summary"
-            android:title="@string/checkbox_preference_title"
+            android:key="randomPlayer"
+            android:summary="@string/checkbox_randomPlayer_summary"
+            android:title="@string/checkbox_randomPlayer_title"
             android:defaultValue="true"/>
+
         <EditTextPreference
             android:key="playername"
             android:summary="@string/playername_summary"
             android:title="@string/playername_title"
             android:defaultValue="default" />
+        <CheckBoxPreference
+            android:key="logged"
+            android:clickable="false"
+            android:defaultValue="false"
+            android:summary="@string/logged_sign_summary"
+            android:title="@string/logged_sing_title"
+            android:visibility="gone" />
     </PreferenceCategory>
 </PreferenceScreen>

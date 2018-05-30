@@ -26,11 +26,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        /*ConectPreferenceActivity.setGameMode(this, ConectPreferenceActivity.GAMEMODE_DEFAULT);
-        if (isOnline())
-            ConectPreferenceActivity.setGameMode(this, "On-Line");*/
-
-        if (!ConectPreferenceActivity.getPlayerName(this).equals(ConectPreferenceActivity.PLAYERNAME_DEFAULT)){
+        if (ConectPreferenceActivity.getLogged(LoginActivity.this)){
             startActivity(new Intent(LoginActivity.this, RoundListActivity.class));
             finish();
             return;
@@ -67,12 +63,6 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                     Toast.LENGTH_SHORT).show();
     }
 
-    /*public boolean isOnline(){
-        ConnectivityManager connMgr = (ConnectivityManager) getSystemService (Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-        return (networkInfo != null && networkInfo.isConnected());
-    }*/
-
     public void onClick(View v) {
         final String playername = usernameEditText.getText().toString();
         final String password = passwordEditText.getText().toString();
@@ -85,8 +75,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                         ConectPreferenceActivity.setPlayerUUID(LoginActivity.this, playerId);
                         ConectPreferenceActivity.setPlayerName(LoginActivity.this, playername);
                         ConectPreferenceActivity.setPlayerPassword(LoginActivity.this, password);
-                        if (repository instanceof FBDataBase)
-                            repository.setPlayerNameSettings(playername, playerId);
+                        ConectPreferenceActivity.setLogged(LoginActivity.this, true);
 
                         startActivity(new Intent(LoginActivity.this, RoundListActivity.class));
                         finish();
